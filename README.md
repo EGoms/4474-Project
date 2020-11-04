@@ -20,4 +20,8 @@ git commit -m "" <message> (write a commit message)
 
 git push (push the changes to whatever branch you are on)
 
-git push -u origin <branchname> (first time pushing changes to a new branch do this to set up remote tracking)
+git push -u origin branchname (first time pushing changes to a new branch do this to set up remote tracking)
+
+git branch -d branchname (deletes branchname locally)
+
+git push --delete origin branchname (deletes branch on remote)
