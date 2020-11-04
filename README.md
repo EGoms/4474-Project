@@ -1,6 +1,6 @@
 # 4474-Project
 
-#Git commands
+# Git commands
 
 git clone <git or https link> (download the repo)
 
