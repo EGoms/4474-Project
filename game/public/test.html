@@ -2,7 +2,6 @@
 <html>
 <head>
     <script type="text/javascript" src="player.js"></script>
-    <script type="text/javascript" src="testing.js"></script>
 </head>
 
 <style>
@@ -15,14 +14,17 @@
         display: grid;
         width: 75%;
     }
-
 </style>
 
 <script>
-    function getNumber(min, max) {
+    function getNumberRound(min, max) {
         min = Math.ceil(min)
         max = Math.floor(max)
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function getNumber(min, max) {
+        return Math.round(Math.random() * (max - min) + min * 10)/10;
     }
 
     function k_combinations(set, k) {
@@ -62,13 +64,13 @@
     let n = 4;  //Let user input
     let nums = [];
     for (let i = 0; i < n**2; i++) {
-        nums.push(getNumber(1,10));
+        nums.push(getNumber(1, n**2));
     }
 
     let combinations = k_combinations(nums, n);
     let sums = [];
     for (var i = 0; i < combinations.length; i++) {
-        var x = combinations[i].reduce((a, b) => a + b, 0);
+        var x = Math.round(combinations[i].reduce((a, b) => a + b, 0) * 10) / 10;
         sums.push(x);
     }
 
@@ -76,6 +78,7 @@
     for (var i=0; i < sums.length; i++) {
         obj[sums[i]] = (obj[sums[i]] || 0 ) +1;
     }
+    console.log(obj);
 
     const result = mostUsed(obj);
 

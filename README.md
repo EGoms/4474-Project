@@ -1,27 +1,38 @@
 # 4474-Project
 
 # Git commands
+git clone \<git or https link\> (download the repo)
 
-git clone <git or https link> (download the repo)
+## Branching
+See all the branches: `git branch -a`
 
-git branch -a (see all the branches)
+Change to a branch: `git checkout branchname`
 
-git fetch --all (fetch all the changes)
+Create a local copy of remote branch: `git checkout -t origin/branchname`
 
-git pull (pull the changes to your local copy of the branch)
+Create a new branch locally: `git checkout -b branchname`
 
-git checkout -t origin/branchname (create a local tracking copy of remote branch)
+Deleting a local branch: `git branch -d branchname`
 
-git checkout -b branchname (create a new branch off of whatever branch you are on)
+Deleting a branch on the remote: `git push --delete origin branchname` 
 
-git add <file> (add file to be committed)
+## Changes
+Get all changes from remote: `git fetch --all`
 
-git commit -m "" <message> (write a commit message)
+Pull the changes from remote to local branch: `git pull` (can get more specific `git pull origin main`)
 
-git push (push the changes to whatever branch you are on)
+Add a file that has changes: `git add \<file\>`
 
-git push -u origin branchname (first time pushing changes to a new branch do this to set up remote tracking)
+Commit the file: `git commit -m "\<message\>"`
 
-git branch -d branchname (deletes branchname locally)
+Push the changes to the remote: `git push` (can get more specific `git push origin main`)
 
-git push --delete origin branchname (deletes branch on remote)
+First time pushing a local branch to remote: `git push -u origin branchname`
+
+
+# Starting python server
+
+For python3: python -m http.server <port>
+For python2: python -m SimpleHTTPServer
+
+
