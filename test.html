@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="player.js"></script>
+    <script type="text/javascript" src="testing.js"></script>
+</head>
+
+<style>
+    #targetSum {
+        width: 50%;
+        margin: 0 auto;
+    }
+
+    #container {
+        display: grid;
+        width: 75%;
+    }
+
+</style>
+
+<script>
+    function getNumber(min, max) {
+        min = Math.ceil(min)
+        max = Math.floor(max)
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function k_combinations(set, k) {
+	    var i, j, combs, head, tailcombs;
+	
+	    if (k > set.length || k <= 0) {
+		    return [];
+	    }
+	
+	    if (k == set.length) {
+		    return [set];
+	    }
+	
+	    if (k == 1) {
+		    combs = [];
+		    for (i = 0; i < set.length; i++) {
+			    combs.push([set[i]]);
+		    }
+		    return combs;
+	    }
+	
+	    combs = [];
+	    for (i = 0; i < set.length - k + 1; i++) {
+		    head = set.slice(i, i + 1);
+		    tailcombs = k_combinations(set.slice(i + 1), k - 1);
+		    for (j = 0; j < tailcombs.length; j++) {
+			    combs.push(head.concat(tailcombs[j]));
+		    }
+	    }
+	    return combs;
+    }
+
+    function mostUsed(arr) {
+        return Object.entries(arr).reduce((a, b) => a[1] > b[1] ? a : b)[0];
+    }
+
+    let n = 4;  //Let user input
+    let nums = [];
+    for (let i = 0; i < n**2; i++) {
+        nums.push(getNumber(1,10));
+    }
+
+    let combinations = k_combinations(nums, n);
+    let sums = [];
+    for (var i = 0; i < combinations.length; i++) {
+        var x = combinations[i].reduce((a, b) => a + b, 0);
+        sums.push(x);
+    }
+
+    var obj = {};
+    for (var i=0; i < sums.length; i++) {
+        obj[sums[i]] = (obj[sums[i]] || 0 ) +1;
+    }
+
+    const result = mostUsed(obj);
+
+    //Second easiest
+    //delete obj[result];
+    //const result2 = mostUsed(obj);
+
+    function addTable(n) {
+        var container = document.getElementById("container");
+        var table = document.createElement("TABLE");
+        table.border=1;
+
+        var tableBody = document.createElement("TBODY");
+        table.appendChild(tableBody);
+        var c = 0;
+        for (var i = 0; i < n; i++) {
+            var tr = document.createElement('TR');
+            tableBody.appendChild(tr);
+
+            for (var j = 0; j < n; j++, c++) {
+                var td = document.createElement('TD');
+                td.width = '75';
+                td.appendChild(document.createTextNode(nums[c]));
+                tr.appendChild(td);
+            }
+        }
+        container.appendChild(table);
+    }
+
+    window.onload = function() {
+       document.getElementById("targetSum").innerHTML+=result;
+       addTable(n);
+    } 
+    
+</script>
+    
+<body style="background-color: powderblue;">
+    <div id="targetSum">Target Sum is </div>
+    <br/><br/>
+    <div id="container"></div>
+</body>
+</html>
