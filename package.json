@@ -1,0 +1,20 @@
+{
+  "name": "4474-project",
+  "version": "1.0.0",
+  "description": "git clone \\<git or https link\\> (download the repo)",
+  "main": "App.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EGoms/4474-Project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EGoms/4474-Project/issues"
+  },
+  "homepage": "https://github.com/EGoms/4474-Project#readme"
+}

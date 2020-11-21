@@ -1,6 +1,6 @@
 import React from 'react';
 
-class App extends React.Component {
+class Image extends React.Component {
     render() {
         return ( 
             <div className="ui container" style={{ marginTop: '10px'}}>
@@ -10,4 +10,4 @@ class App extends React.Component {
     }
 };
 
-export default App;
+export default Image;
