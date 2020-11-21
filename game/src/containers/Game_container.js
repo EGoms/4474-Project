@@ -1,10 +1,46 @@
 import React from 'react';
 import help from '../images/help.png';
+import Image from '../components/Image';
+import Title from '../components/Title';
+import Help from './Help';
+import Options from './Options';
+import Opponent from './Opponent';
 
 // This class is used as the outermost container for the game. Inside will be the game 
 // board (a smaller container), and the persistent buttons in the corners (state dependent)
 
 class Game_container extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+          inGame: false,
+          homeScreen: true,
+          helpScreen: false,
+          opponent: false,
+          options: false,
+        };
+        this.showHelp = this.showHelp.bind(this);
+        this.showOpponent = this.showOpponent.bind(this);
+      };
+
+    showHelp(){
+        console.log('Changing to helpscreen');
+        this.setState({
+            homeScreen: false,
+            helpScreen: true,
+            });
+    }
+    showOpponent(){
+        console.log('Changing to Opponent Screen');
+        this.setState({
+            inGame: false,
+            homeScreen: false,
+            helpScreen: false,
+            opponent: true,
+            options: false,
+        });
+    }
+
     render() {
         const myStyle = {
             display: 'grid',
@@ -16,54 +52,52 @@ class Game_container extends React.Component {
             backgroundColor: 'lightblue'
         }
 
-        const gridStyle1 = {
-            border: '1px solid rgba(0, 0, 0, 0.8)',
-            width: 'auto',
-            height: '150px',
-            textAlign: 'center',
-            margin: '5%',
-            position: 'relative'
-        }
-
-        const gridStyle2 = {
-            width: 'auto',
-            height: '200px',
-            margin: '5%',
-            border: '1px solid rgba(0, 0, 0, 0.8)'
-        }
-
         const buttonStyle = {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
             backgroundColor: 'black',
             color: 'white',
-            width: '50%',
-            marginLeft: '25%',
-            textAlign: 'center'
+            width: '300px',
+            height: '175px',
+            marginLeft: '350px',
+            marginTop: '450px',
+            textAlign: 'center',
+            position: 'fixed'
         }
 
         const helpButtonStyle = {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: 'black',
             color: 'white',
-            width: '10%',
-            marginTop: '20%',
-            marginLeft: '90%',
-            textAlign: 'center'
+            width: '50px',
+            marginTop: '748px',
+            marginLeft: '945px',
+            textAlign: 'center',
+            position: 'fixed'
         }
 
-        return ( 
-            <div style={myStyle}>
-                <div style={gridStyle1}>Title</div>
-                <div style={gridStyle2}>Game and Image here</div>
-                <button style={buttonStyle}>Play</button>
-                <button style={helpButtonStyle}>Help</button>
-                <img src={help} alt='HelpButton' />
-            </div>
-        );
+        if (this.state.helpScreen){
+            return <Help />
+        }
+        else if(this.state.inGame){
+            return <div></div>
+        }
+        else if(this.state.options){
+            return <Options />
+        }
+        else if(this.state.opponent){
+            return <Opponent />
+        }
+        else if (this.state.homeScreen){
+            return (
+                <div style={myStyle}>
+                    <Title />
+                    <Image />
+                    <button style={buttonStyle} onClick={this.showOpponent}>Play</button>
+
+                    <input onClick={this.showHelp} style={helpButtonStyle} type="image" src={help} name="helpbutton"/>
+                </div>
+            )
+        }; 
     }
 };
 
