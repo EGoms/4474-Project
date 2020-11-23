@@ -5,11 +5,12 @@ import Title from '../components/Title';
 import Help from './Help';
 import Options from './Options';
 import Opponent from './Opponent';
+import GameFunctions from './GameFunctions';
 
 // This class is used as the outermost container for the game. Inside will be the game 
 // board (a smaller container), and the persistent buttons in the corners (state dependent)
 
-class Game_container extends React.Component {
+class GameContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -40,6 +41,18 @@ class Game_container extends React.Component {
             options: false,
         });
     }
+    
+    showGame(){
+        console.log('Changing to Game Screen');
+        this.setState({
+            inGame: true,
+            homeScreen: false,
+            helpScreen: false,
+            opponent: false,
+            options: false,
+        });
+    }
+
 
     render() {
         const myStyle = {
@@ -76,10 +89,10 @@ class Game_container extends React.Component {
         }
 
         if (this.state.helpScreen){
-            return <Help />
+            return <Help inGame={this.state.inGame}/>
         }
         else if(this.state.inGame){
-            return <div></div>
+            return <GameFunctions />
         }
         else if(this.state.options){
             return <Options />
@@ -101,4 +114,4 @@ class Game_container extends React.Component {
     }
 };
 
-export default Game_container;
+export default GameContainer;

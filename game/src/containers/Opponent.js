@@ -1,5 +1,7 @@
 import React from 'react';
-import Options from './Options'
+import Options from './Options';
+import GameFunctions from './GameFunctions';
+import GameBoard from './GameBoard';
 
 class Opponent extends React.Component {
  
@@ -8,8 +10,10 @@ class Opponent extends React.Component {
         this.state = {
           opponent: true,
           options: false,
+          game: false
         };
         this.showOptions = this.showOptions.bind(this);
+        this.showGame = this.showGame.bind(this);
     };
 
     showOptions(){
@@ -17,6 +21,15 @@ class Opponent extends React.Component {
         this.setState({
             options: true,
             opponent: false,
+        });
+    }
+
+    showGame(){
+        console.log('Changing to Options');
+        this.setState({
+            options: false,
+            opponent: false,
+            game: true
         });
     }
 
@@ -63,13 +76,16 @@ class Opponent extends React.Component {
                 <div style={myStyle}>
                     <div style={title}>Choose your Opponent</div>
                     <button style={buttonCPU} onClick={this.showOptions}>CPU</button>
-                    <button style={buttonPVP} onClick={this.showOptions}>PVP</button>
+                    <button style={buttonPVP} onClick={this.showGame}>PVP</button>
                 </div>
             );
         }
         else if (this.state.options)
         {
             return <Options />
+        }
+        else if (this.state.game){
+            return <GameBoard />
         }
     };
 }

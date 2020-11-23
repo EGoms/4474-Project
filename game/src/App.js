@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 
-import Game_container from './containers/Game_container';
+import GameContainer from './containers/GameContainer';
 
 class App extends Component {
   render() {
     return (
-      <Game_container/>
+      <GameContainer/>
     );
   }
 }
