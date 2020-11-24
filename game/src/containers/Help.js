@@ -31,6 +31,7 @@ class Help extends React.Component {
             transform: 'translateX(-50%)',
             position: 'fixed',
             border: '5px solid black',
+            borderRadius: '10px',
             height: '90%',
             width: '80%',
             marginTop: '50px',
@@ -57,21 +58,27 @@ class Help extends React.Component {
             marginRight: 'auto',
         }
 
+        function MouseOver(event) {
+            event.target.style.border = '3px solid darkRed';
+            
+        }
+
+        function MouseOut(event){
+            event.target.style.border = 'none';
+        }
+    
         const helpButtonStyle = {
             display: 'flex',
+            borderRadius: '10px',
             float: 'left',
-            // justifyContent: 'center',
-            // alignItems: 'center',
-            // color: 'white',
             position: 'absolute',
             width: '50px',
             height: 'auto',
             bottom: '2%',
             left: '2%',
             marginLeft: '10px',
-            // textAlign: 'center',
-            // position: 'fixed'
         }
+
 
 
         if(this.state.display){
@@ -84,7 +91,7 @@ class Help extends React.Component {
                     <div style={vidStyle}>
                         <HelpVid />
                     </div>
-                    <input onClick={this.goBack} style={helpButtonStyle} src={back} type="image"  name="helpbutton"/>
+                    <input onClick={this.goBack} style={helpButtonStyle} onMouseOver={MouseOver} onMouseOut={MouseOut} src={back} type="image"  name="helpbutton"/>
                 </div> 
             )
         }
