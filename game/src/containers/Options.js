@@ -4,6 +4,12 @@ import Image from '../components/Image';
 import Title from '../components/Title';
 import GameFunctions from './GameFunctions';
 import GameBoard from './GameBoard';
+import easy from '../images/easy.png';
+import medium from '../images/medium.png';
+import hard from '../images/hard.png';
+import nine from '../images/nine.png';
+import sixteen from '../images/sixteen.png';
+import start from '../images/startButton.png';
 
 class Options extends React.Component {
     constructor(props) {
@@ -64,12 +70,16 @@ class Options extends React.Component {
     render(){
         const myStyle = {
             display: 'grid',
-            border: '5px solid black',
-            height: '800px',
-            width: '1000px',
             margin: 'auto',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            position: 'fixed',
+            border: '5px solid black',
+            borderRadius: '10px',
+            height: '90%',
+            width: '80%',
             marginTop: '50px',
-            backgroundColor: 'lightblue'
+            backgroundColor: 'lightblue',
         }
 
         const title = {
@@ -78,71 +88,47 @@ class Options extends React.Component {
         }
 
         const easyStyle = {
-            backgroundColor: 'green',
-            color: 'white',
-            width: '200px',
-            height: '150px',
-            marginLeft: '150px',
-            marginTop: '150px',
-            textAlign: 'center',
-            position: 'fixed'
+            marginLeft: '20%'
+
         }
 
         const mediumStyle = {
-            backgroundColor: 'yellow',
-            color: 'solid black',
-            width: '200px',
-            height: '150px',
-            marginLeft: '150px',
-            marginTop: '300px',
-            textAlign: 'center',
-            position: 'fixed'
+            marginLeft: '20%'
         }
 
         const hardStyle = {
-            backgroundColor: 'red',
-            color: 'white',
-            width: '200px',
-            height: '150px',
-            marginLeft: '150px',
-            marginTop: '450px',
-            textAlign: 'center',
-            position: 'fixed'
+            marginLeft: '20%'
+
         }
 
-
         const  numberStyle9 = {
-            backgroundColor: 'black',
-            color: 'white',
             width: '200px',
-            height: '150px',
-            marginLeft: '550px',
+            height: 'auto',
+            marginLeft: '60%',
             marginRight: '150px',
-            marginTop: '200px',
+            marginTop: '20%',
             textAlign: 'center',
-            align: 'right',
             position: 'fixed'
         }
 
         const  numberStyle16 = {
-            backgroundColor: 'black',
-            color: 'white',
             width: '200px',
-            height: '150px',
-            marginLeft: '550px',
-            marginTop: '400px',
+            height: 'auto',
+            marginLeft: '60%',
+            marginTop: '35%',
             textAlign: 'center',
             position: 'fixed'
         }
 
         const  continueStyle = {
-            backgroundColor: 'purple',
             color: 'white',
             width: '100px',
             height: '75px',
             marginLeft: '850px',
             marginTop: '700px',
             textAlign: 'center',
+            right: '3%',
+            bottom: '2%',
             position: 'fixed'
         }
 
@@ -150,19 +136,19 @@ class Options extends React.Component {
             return (
                 <div style={myStyle}>
                     <div style={title}>Game Options</div>
-                    <button style={easyStyle} onClick={this.easy}>easy</button>
-                    <button style={mediumStyle} onClick={this.medium}>medium</button>
-                    <button style={hardStyle} onClick={this.hard}>hard</button>
-                    <button style={numberStyle9} onClick={this.numbersNine}>9</button>
-                    <button style={numberStyle16} onClick={this.numbersSixteen}>16</button>
-                    <button style={continueStyle} onClick={this.playGame}>Continue</button>              
+                    <input onClick={this.easy} style={easyStyle} type="image" src={easy} name="Easy"/>
+                    <input onClick={this.medium} style={mediumStyle} type="image" src={medium} name="Easy"/>
+                    <input onclick={this.medium} style={hardStyle} type="image" src={hard} name="Easy"/>
+                    <input onclick={this.numberNine} style={numberStyle9} type="image" src={nine} name="Easy"/>
+                    <input onclick={this.numbersSixteen} style={numberStyle16} type="image" src={sixteen} name="Easy"/>
+                    <input onClick={this.playGame} style={continueStyle} type="image" src={start} name="Easy"/>
                 </div>
             );       
         }
         else{
             return (
                 <div>
-                    <GameFunctions number={this.state.size}/>
+                    <GameBoard />
                 </div> 
             )
         }

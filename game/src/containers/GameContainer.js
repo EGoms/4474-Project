@@ -6,6 +6,10 @@ import Help from './Help';
 import Options from './Options';
 import Opponent from './Opponent';
 import GameFunctions from './GameFunctions';
+import Play from '../images/play.png'
+import water from '../images/water.png';
+
+
 
 // This class is used as the outermost container for the game. Inside will be the game 
 // board (a smaller container), and the persistent buttons in the corners (state dependent)
@@ -57,36 +61,38 @@ class GameContainer extends React.Component {
     render() {
         const myStyle = {
             display: 'grid',
-            border: '5px solid black',
-            height: '800px',
-            width: '1000px',
             margin: 'auto',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            position: 'fixed',
+            border: '5px solid black',
+            borderRadius: '10px',
+            height: '90%',
+            width: '80%',
             marginTop: '50px',
-            backgroundColor: 'lightblue'
+            backgroundColor: 'lightblue',
+            backgroundImage: 'url('+water+')',
+            backgroundSize: '100%',
         }
 
-        const buttonStyle = {
-            backgroundColor: 'black',
-            color: 'white',
-            width: '300px',
-            height: '175px',
-            marginLeft: '350px',
-            marginTop: '450px',
-            textAlign: 'center',
-            position: 'fixed'
+        const PlayButtonStyle = {
+            width: '20%',
+            height: 'auto',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            marginTop:'25px',
         }
 
         const helpButtonStyle = {
+            position: 'absolute',
             display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            color: 'white',
-            width: '50px',
-            marginTop: '748px',
-            marginLeft: '945px',
-            textAlign: 'center',
-            position: 'fixed'
+            width: '10%',
+            height: 'auto',
+            bottom: '2%',
+            right: '2%',
+
         }
+
 
         if (this.state.helpScreen){
             return <Help inGame={this.state.inGame}/>
@@ -104,9 +110,7 @@ class GameContainer extends React.Component {
             return (
                 <div style={myStyle}>
                     <Title />
-                    <Image />
-                    <button style={buttonStyle} onClick={this.showOpponent}>Play</button>
-
+                    <input onClick={this.showOpponent} style={PlayButtonStyle} type="image" src={Play} name="PlayButton"/>
                     <input onClick={this.showHelp} style={helpButtonStyle} type="image" src={help} name="helpbutton"/>
                 </div>
             )

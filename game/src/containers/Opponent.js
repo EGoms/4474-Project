@@ -2,6 +2,8 @@ import React from 'react';
 import Options from './Options';
 import GameFunctions from './GameFunctions';
 import GameBoard from './GameBoard';
+import friend from '../images/friend.png'
+import computer from '../images/computer.png'
 
 class Opponent extends React.Component {
  
@@ -36,13 +38,33 @@ class Opponent extends React.Component {
     render() {
         const myStyle = {
             display: 'grid',
-            border: '5px solid black',
-            height: '800px',
-            width: '1000px',
             margin: 'auto',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            position: 'fixed',
+            border: '5px solid black',
+            borderRadius: '10px',
+            height: '90%',
+            width: '80%',
             marginTop: '50px',
-            backgroundColor: 'lightblue'
+            backgroundColor: 'lightblue',
         }
+
+        const cpuButtonStyle = {
+            width: '30%',
+            height: '80%',
+            marginLeft: 'auto',
+            marginRight: 'auto'
+        }
+
+        const playerButtonStyle = {
+            width: '30%',
+            height: '80%',
+            marginLeft: 'auto',
+            marginRight: 'auto'
+
+        }
+        
 
         const title = {
             fontSize: '80px',
@@ -75,8 +97,8 @@ class Opponent extends React.Component {
             return (
                 <div style={myStyle}>
                     <div style={title}>Choose your Opponent</div>
-                    <button style={buttonCPU} onClick={this.showOptions}>CPU</button>
-                    <button style={buttonPVP} onClick={this.showGame}>PVP</button>
+                    <input onClick={this.showOptions} style={playerButtonStyle} type="image" src={friend} name="helpbutton"/>
+                    <input onClick={this.showOptions} style={cpuButtonStyle} type="image" src={computer} name="helpbutton"/>
                 </div>
             );
         }

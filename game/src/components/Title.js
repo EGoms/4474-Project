@@ -1,20 +1,30 @@
 import React from 'react';
 import title from '../images/title.png';
+import cartoon from '../images/waterCartoon.png';
+
 
 class Title extends React.Component {
     render() {
+        const cartoonStyle = {
+            width: '10%',
+            marginLeft: '1%'
+        }
         return ( 
-            <div className="ui container">
+            <div className="ui container" style={{textAlign: 'center'}}>
                 <img src={title} 
                     style=
                         {{
-                            border: '1px solid rgba(0, 0, 0, 0.8)',
+                            // display: 'block',
+                            height: 'auto',
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                            marginTop: '8%',
                             width: 'auto',
                             height: '225px',
-                            marginLeft: '300px',
                             textAlign: 'center',
-                            position: 'fixed'}}
+                        }}
                 />
+                <img src={cartoon} style={cartoonStyle}/>
             </div>
         );
     }
