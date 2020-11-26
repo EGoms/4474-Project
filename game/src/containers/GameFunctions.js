@@ -71,12 +71,10 @@ function mostUsed(arr) {
      */
 function logic(n, fn) {
         let nums = [];  //Populate the numbers for the grid
-        let n1 = n;
-        //let n1 = n['n'];
-        for (let i = 0; i < n1**2; i++) {    //n = 3,4 so numbers 1-9 or 16
-            nums.push(fn(1, n1**2));  //todo move the function
+        for (let i = 0; i < n**2; i++) {    //n = 3,4 so numbers 1-9 or 16
+            nums.push(fn(1, n**2));  //todo move the function
         }
-        let combinations = k_combinations(nums, n1);
+        let combinations = k_combinations(nums, n);
         let sums = [];
         //Calculate the sum of each combinations
         for (var i = 0; i < combinations.length; i++) {
@@ -94,12 +92,61 @@ function logic(n, fn) {
         return [nums, targetSum];
     }
 
+function allowDrop(ev) {
+    ev.preventDefault();
+}
 
-export function AddTable(n) {
-    var n1 = n;
-    //var n1 = n.valueOf()['n'];
+function drag(ev) {
+    ev.dataTransfer.setData("text/plain", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text/plain");
+    console.log("Dropping");
+    console.log(data);
+    ev.target.appendChild(document.getElementById(data));
+}
+
+export function AddTable2(props) {
+    if (x == 0) {
+        var values = logic(props.n, getWholeNumber);
+        var nums = values[0];
+        var targetSum = values[1];
+        if (props.n == 3) {
+            return (<table border="1">
+                <tbody>
+                    <tr>
+                        <td rowSpan={props.n + 1} width="75" onDrop={drop} onDragOver={allowDrop}>Player 1</td>
+                    </tr>
+                    <tr>
+                        <td id="1" width="75" draggable="true" onDragStart={drag}>1</td>
+                        <td id="2" width="75" draggable="true">2</td>    
+                        <td id="2" width="75" draggable="true">3</td>
+                        <td id="test" rowSpan="4" width="75">Player 2</td>        
+                    </tr>
+                    <tr>
+                        <td id="2" width="75" draggable="true">4</td>
+                        <td id="2" width="75" draggable="true">5</td>    
+                        <td id="2" width="75" draggable="true">6</td>        
+                    </tr>
+                    <tr>
+                        <td id="2" width="75" draggable="true">7</td>
+                        <td id="2" width="75" draggable="true">8</td>    
+                        <td id="2" width="75" draggable="true">9</td>        
+                    </tr>
+                </tbody>
+                </table>
+                )
+        }
+
+        x++;
+    }
+}
+
+export function AddTable(props) {
     if (x === 0) {
-        var values = logic(n, getWholeNumber);
+        var values = logic(props.n, getWholeNumber);
         var nums = values[0];
         var targetSum = values[1];
         var container = document.getElementById("root");
@@ -126,23 +173,45 @@ export function AddTable(n) {
 
         var tableBody = document.createElement("TBODY");
         table.appendChild(tableBody);
+
+
+        var tr1 = document.createElement('TR');
+        var td1 = document.createElement('TD');
+        tableBody.appendChild(tr1);
+        tr1.appendChild(td1);
+        td1.setAttribute('rowspan', props.n+1);
+        td1.addEventListener("dragover", allowDrop);
+        td1.addEventListener("drop", drop);
+        td1.width='75';
+
         var c = 0;
-        for (var i = 0; i < n1; i++) {
+        for (var i = 0; i < props.n; i++) {
             var tr = document.createElement('TR');
             tableBody.appendChild(tr);
 
-            for (var j = 0; j < n1; j++, c++) {
+            for (var j = 0; j < props.n; j++, c++) {
                 var td = document.createElement('TD');
                 td.width = '75';
                 td.appendChild(document.createTextNode(nums[c]));
+                td.setAttribute('draggable', 'true');
+                td.addEventListener('dragstart', drag)
                 tr.appendChild(td);
+                if (c == 9) {
+                    var td2 = document.createElement('TD');
+                    td2.setAttribute('rowspan', props.n+1);
+                    td2.width='75';
+                    tr.appendChild(td2);
+                }
             }
         }
+
         div2.appendChild(table);
         container.append(div2);
         x = 1;
     }
 }
+
+//TODO: Create table of drag and droppable objects
 
 class GameFunctions extends React.Component {
     constructor(props) {
@@ -151,10 +220,35 @@ class GameFunctions extends React.Component {
         };
     };
 
+    onDragStart = (ev, id) => {
+        console.log('dragstart:',id);
+        ev.dataTransfer.setData("id", id);
+    }
+
+    onDragOver = (ev) => {
+        ev.preventDefault();
+    }
+
+    onDrop = (ev, cat) => {
+       let id = ev.dataTransfer.getData("id");
+       
+    //    let tasks = this.state.tasks.filter((task) => {
+    //        if (task.name == id) {
+    //            task.category = cat;
+    //        }
+    //        return task;
+    //    });
+
+    //    this.setState({
+    //        ...this.state,
+    //        tasks
+    //    });
+    }
+
     render() {
         return ( 
             <div>
-                <AddTable n={3}/>
+                <AddTable2 n={3}/>
             </div>
         )
     }

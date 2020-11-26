@@ -107,7 +107,7 @@ class Opponent extends React.Component {
             return <Options />
         }
         else if (this.state.game){
-            return <GameBoard />
+            return <DragAndDrop />
         }
     };
 }

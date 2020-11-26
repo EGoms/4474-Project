@@ -70,7 +70,7 @@ class GameContainer extends React.Component {
             height: '90%',
             width: '80%',
             marginTop: '50px',
-            backgroundColor: 'lightblue',
+            backgroundColor: 'pink',
             backgroundImage: 'url('+water+')',
             backgroundSize: '100%',
         }

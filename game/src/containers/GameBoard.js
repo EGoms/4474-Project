@@ -9,12 +9,24 @@ import GameFunctions, {AddTable} from './GameFunctions';
 
 //gameplay contianer
 
+function DifficultyMessage(props) {
+    const difficult = props.difficulty;
+    console.log(difficult);
+    if (difficult === "easy") {
+      return "Easy Difficulty";
+    } else if (difficult == "medium") {
+        return "Medium Difficulty"
+    } else {
+        return "Hard Difficulty";
+    }
+  }
+
 class GameBoard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             players: 1,
-            difficult: 'Easy',
+            difficulty: 'easy',
             numbers: 9,
             inGame: true
         };
@@ -52,7 +64,7 @@ class GameBoard extends React.Component {
 
         const test3 = {
             float: 'left',
-            width: '79.6%',
+            width: '79%',
             height: '100%',
             border: '0.5px solid black'
         }
@@ -60,7 +72,7 @@ class GameBoard extends React.Component {
 
         if(this.state.inGame){
             return(
-                <div><center>{this.state.difficult}</center>
+                <div><center><DifficultyMessage difficulty={this.state.difficulty}/></center>
                     <div style={myStyle}>
                         <div style={test}>
                             <div style={test2}><center>Player 1 Area</center></div>
