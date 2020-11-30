@@ -4,6 +4,7 @@ import GameFunctions from './GameFunctions';
 import GameBoard from './GameBoard';
 import friend from '../images/friend.png'
 import computer from '../images/computer.png'
+import DragAndDrop from './DragAndDrop';
 
 class Opponent extends React.Component {
  
