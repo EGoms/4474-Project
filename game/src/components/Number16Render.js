@@ -10,12 +10,12 @@ class Number16Render extends React.Component {
     };
 
     render(){
-        const  numberStyle = {
+        const numberStyle = {
             width: '35%',
         }
 
-        const  numberStyleSelected = {
-            width: '15%',
+        const numberStyleSelected = {
+            width: '35%',
         }
 
         if(this.props.size == 16){

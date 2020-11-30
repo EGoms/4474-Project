@@ -16,7 +16,6 @@ class Number9Render extends React.Component {
 
         const numberStyleSelected = {
             width: '35%',
-
         }
 
         if(this.props.size == '9'){
