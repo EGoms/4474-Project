@@ -14,12 +14,19 @@ class HardButton extends React.Component {
 
     render(){
         const hardStyle = {
-            marginLeft: '20%'
+            display: 'block',
+            margin: 'auto',
+            height: '80%',
+            width: 'auto',
+            gridTemplateColumns: '1fr 1fr'
         }
 
         const hardStyleSelected = {
-            marginLeft: '20%',
-            border: '1px solid coral',
+            display: 'block',
+            margin: 'auto',
+            height: '80%',
+            width: 'auto',
+            border: '1px solid coral'
         }
 
         if(this.props.difficulty =='hard'){

@@ -14,18 +14,23 @@ class EasyButton extends React.Component {
 
     render(){
         const easyStyle = {
-            marginLeft: '20%',
-            gridTemplateColumns: '1fr 1fr',
+            display: 'block',
+            margin: 'auto',
+            height: '80%',
+            width: 'auto'
         }
 
         const easyStyleSelected = {
-            marginLeft: '20%',
-            border: '1px solid coral',
+            display: 'block',
+            margin: 'auto',
+            height: '80%',
+            width: 'auto',
+            border: '1px solid coral'
         }
 
         if(this.props.difficulty =='easy'){
             return(
-                <input  style={easyStyleSelected} type="image" src={easy} name="Easy"/>
+                <input style={easyStyleSelected} type="image" src={easy} name="Easy"/>
             )
         }
         else{

@@ -9,8 +9,6 @@ import GameFunctions from './GameFunctions';
 import Play from '../images/play.png'
 import water from '../images/water.png';
 
-
-
 // This class is used as the outermost container for the game. Inside will be the game 
 // board (a smaller container), and the persistent buttons in the corners (state dependent)
 
@@ -60,20 +58,18 @@ class GameContainer extends React.Component {
 
     render() {
         const myStyle = {
-            display: 'grid',
-            margin: 'auto',
-            left: '50%',
+            display: 'inline-grid',
+            gridTemplateColumns: '10% auto 10%',
+            gridTemplateColumns: 'auto auto',
+            backgroundColor: '#2196F3',
+            marginLeft: '50%',
             transform: 'translateX(-50%)',
-            position: 'fixed',
-            border: '5px solid black',
-            borderRadius: '10px',
-            height: '90%',
-            width: '80%',
-            marginTop: '50px',
+            height: '80vh',
+            width: '80vw',
             backgroundColor: 'pink',
             backgroundImage: 'url('+water+')',
             backgroundSize: '100%',
-        }
+        };
 
         const PlayButtonStyle = {
             width: '20%',
@@ -81,7 +77,7 @@ class GameContainer extends React.Component {
             marginLeft: 'auto',
             marginRight: 'auto',
             marginTop:'25px',
-        }
+        };
 
         const helpButtonStyle = {
             position: 'absolute',
@@ -91,8 +87,15 @@ class GameContainer extends React.Component {
             bottom: '2%',
             right: '2%',
 
-        }
+        };
 
+        const titleStyle = {
+            gridColumnStart: '2',
+            gridColumnEnd: '3',
+            padding: '5%',
+            margin: '0px',
+            border: '5px solid black'
+        };
 
         if (this.state.helpScreen){
             return <Help inGame={this.state.inGame}/>
@@ -109,9 +112,9 @@ class GameContainer extends React.Component {
         else if (this.state.homeScreen){
             return (
                 <div style={myStyle}>
-                    <Title />
-                    <input onClick={this.showOpponent} style={PlayButtonStyle} type="image" src={Play} name="PlayButton"/>
-                    <input onClick={this.showHelp} style={helpButtonStyle} type="image" src={help} name="helpbutton"/>
+                    <div style={titleStyle}><Title /></div>
+                    <div><input onClick={this.showOpponent} style={PlayButtonStyle} type="image" src={Play} name="PlayButton"/></div>
+                    <div><input onClick={this.showHelp} style={helpButtonStyle} type="image" src={help} name="helpbutton"/></div>
                 </div>
             )
         }; 

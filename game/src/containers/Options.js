@@ -2,6 +2,7 @@ import React from 'react';
 import help from '../images/help.png';
 import Image from '../components/Image';
 import Title from '../components/Title';
+import OptionsTitle from '../images/options.png';
 import GameFunctions from './GameFunctions';
 import GameBoard from './GameBoard';
 import easy from '../images/easy.png';
@@ -10,20 +11,22 @@ import hard from '../images/hard.png';
 import nine from '../images/nine.png';
 import sixteen from '../images/sixteen.png';
 import start from '../images/startButton.png';
+import continueButton from '../images/continue.png';
 import EasyButton from '../components/EasyButton';
 import MediumButton from '../components/MediumButton';
 import HardButton from '../components/HardButton';
 import DragAndDrop from '../containers/DragAndDrop';
 import Number9Render from '../components/Number9Render';
 import Number16Render from '../components/Number16Render';
+import ContinueButtonComponent from '../components/ContinueButtonComponent';
 
 class Options extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            players: 1,
+            players: props.players,
             selectedDifficulty: 'easy',
-            size: '9',
+            size: 9,
             startGame: false
         };
         this.easy = this.easy.bind(this);
@@ -55,11 +58,13 @@ class Options extends React.Component {
     }
 
     numberNine(){
+        console.log('selecting 9')
         this.setState({
             size: 9
         })
     }
     numberSixteen(){
+        console.log('selecting 16')
         this.setState({
             size: 16
         })
@@ -90,79 +95,79 @@ class Options extends React.Component {
         const myStyle = {
             display: 'inline-grid',
             gridTemplateColumns: 'auto auto',
+            gridTemplateRows: '20% auto',
             backgroundColor: '#2196F3',
-            padding: '10px',
-            // margin: 'auto',
-            // left: '50%',
-            // transform: 'translateX(-50%)',
-            // position: 'fixed',
-            // border: '5px solid black',
-            // borderRadius: '10px',
-            height: '90%',
-            width: '80%'
-            // marginTop: '50px',
-            // backgroundColor: 'pink',
-            // position: 'absolute'
+            marginLeft: '50%',
+            transform: 'translateX(-50%)',
+            height: '80vh',
+            width: '80vw',
+            position: 'absolute'
         };
 
-        const title = {
-            fontSize: '80px',
-            textAlign: 'center',
-            border: 'solid black',
+        const titleStyle = {
             gridColumnStart: '1',
-            gridColumnEnd: '3'
+            gridColumnEnd: '3',
+            textAlign: 'center',
+            height: '100%',
+            border: '5px solid black'
         };
 
-        const  continueStyle = {
-            color: 'white',
-            width: '100px',
-            height: '75px',
-            marginLeft: '850px',
-            marginTop: '700px',
+        const subTitle = {
+            fontSize: '40px',
             textAlign: 'center',
-            right: '3%',
-            bottom: '2%',
-            position: 'fixed'
+            padding: '0px 0px 10px 0px',
+            border: '5px solid orange'
+            
+        };
+
+        const cellStyle = { 
+            padding: '10px 0px 10px 0px',
+            height: '20%',
+            border: '5px solid black'
         }
 
-        const testStyle = {
-            gridColumnStart: '2',
-            gridColumnEnd: '4',
-            border: '5px solid white',
-            width: '45%'
-        };
+        const continueCellStyle = {
+            height: '20%',
+            padding: '60px 0px 10px 0px',
+            border: '5px solid pink',
+            textAlign: 'right'
+        }
+
+        const imageStyle = {
+            height:  '100%',
+            width: 'auto'
+        }
+
+        const columnStyle = {
+            padding: '20px', 
+            justifyItems: 'center', 
+            alignItems: 'center'
+        }
 
         // Render options screen
         if(!this.state.startGame){
             return (
                 <div style={myStyle}>
-                    <div style={title}>Game Option</div>
-                    <div class="column" style={{border: '5px solid black', padding: '20px'}}>
-                        <div onClick={this.easy}><EasyButton difficulty={this.state.selectedDifficulty}/></div>
-                        <div onClick={this.medium}><MediumButton difficulty={this.state.selectedDifficulty}/></div>
-                        <div onClick={this.hard}><HardButton difficulty={this.state.selectedDifficulty}/></div>
+                    <div style={titleStyle}><img style={imageStyle} src={OptionsTitle}/></div>
+                    <div class="column" style={columnStyle}>
+                        <div style={subTitle}>Difficulty</div>
+                        <div onClick={this.easy} style={cellStyle}><EasyButton difficulty={this.state.selectedDifficulty}/></div>
+                        <div onClick={this.medium} style={cellStyle}><MediumButton difficulty={this.state.selectedDifficulty}/></div>
+                        <div onClick={this.hard} style={cellStyle}><HardButton difficulty={this.state.selectedDifficulty}/></div>
                     </div>
-                    <div class="column" style={{border: '5px solid black', padding: '20px'}}>
-                        <div> <Number9Render size={this.state.size}/></div>
-                        <div> <Number16Render size={this.state.size}/></div>
+                    <div class="column" style={columnStyle}>
+                        <div style={subTitle}>Board Size</div>
+                        <div onClick={this.numberNine} style={cellStyle}> <Number9Render size={this.state.size}/></div>
+                        <div onClick={this.numberSixteen} style={cellStyle}> <Number16Render size={this.state.size}/></div>
+                        <div onClick={this.playGame} style={cellStyle}><ContinueButtonComponent/></div>
                     </div>
                 </div>
-                    // {/* <div style={title}>Game Options</div>
-                    // <div style={testStyle}> 
-                    //     <div onClick={this.easy}><EasyButton difficulty={this.state.selectedDifficulty}/></div>
-                    //     <div onClick={this.medium}><MediumButton difficulty={this.state.selectedDifficulty}/></div>
-                    //     <div onClick={this.hard}><HardButton difficulty={this.state.selectedDifficulty}/></div>
-                    // </div>
-                    // <div style={{display: 'inline', border: '5px solid black', width: '45%'}}>
-                    //     <div style={{display: 'inlineBlock', border: '5px solid green'}}> <Number9Render size={this.state.size}/></div>
-                    //     <div style={{border: '5px solid black'}}> <Number16Render size={this.state.size}/></div>
-                    // </div> */}
             )
         }
         else{
             return (
                 <div>
-                    <DragAndDrop />
+                    <GameFunctions difficulty={'easy'} n={this.state.size} players={this.state.players}/>
                 </div> 
             )
         };

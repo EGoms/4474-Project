@@ -13,28 +13,40 @@ class Opponent extends React.Component {
         this.state = {
           opponent: true,
           options: false,
-          game: false
+          game: false,
+          player: 1
         };
-        this.showOptions = this.showOptions.bind(this);
-        this.showGame = this.showGame.bind(this);
+        this.showOptionsCPU = this.showOptionsCPU.bind(this);
+        this.showOptionsPVP = this.showOptionsPVP.bind(this);
+        //this.showGame = this.showGame.bind(this);
     };
 
-    showOptions(){
-        console.log('Changing to Options');
+    showOptionsCPU(){
+        console.log('Changing to Options CPU');
         this.setState({
             options: true,
             opponent: false,
+            player: 1
         });
     }
 
-    showGame(){
-        console.log('Changing to Options');
+    showOptionsPVP(){
+        console.log('Changing to Options PVP');
         this.setState({
-            options: false,
+            options: true,
             opponent: false,
-            game: true
+            player: 2
         });
     }
+
+    // showGame(){
+    //     console.log('Changing to Options');
+    //     this.setState({
+    //         options: false,
+    //         opponent: false,
+    //         game: true
+    //     });
+    // }
 
     render() {
         const myStyle = {
@@ -66,31 +78,9 @@ class Opponent extends React.Component {
 
         }
         
-
         const title = {
             fontSize: '80px',
             textAlign: 'center'
-        }
-
-        const buttonCPU = {
-            backgroundColor: 'black',
-            color: 'white',
-            width: '300px',
-            height: '175px',
-            marginLeft: '350px',
-            marginTop: '250px',
-            textAlign: 'center',
-            position: 'fixed'
-        }
-        const buttonPVP = {
-            backgroundColor: 'black',
-            color: 'white',
-            width: '300px',
-            height: '175px',
-            marginLeft: '350px',
-            marginTop: '500px',
-            textAlign: 'center',
-            position: 'fixed'
         }
 
         if (this.state.opponent)
@@ -98,17 +88,17 @@ class Opponent extends React.Component {
             return (
                 <div style={myStyle}>
                     <div style={title}>Choose your Opponent</div>
-                    <input onClick={this.showOptions} style={playerButtonStyle} type="image" src={friend} name="helpbutton"/>
-                    <input onClick={this.showOptions} style={cpuButtonStyle} type="image" src={computer} name="helpbutton"/>
+                    <input onClick={this.showOptionsPVP} style={playerButtonStyle} type="image" src={friend} name="helpbutton"/>
+                    <input onClick={this.showOptionsCPU} style={cpuButtonStyle} type="image" src={computer} name="helpbutton"/>
                 </div>
             );
         }
         else if (this.state.options)
         {
-            return <Options />
+            return <Options players={this.state.player}/>
         }
         else if (this.state.game){
-            return <DragAndDrop />
+            return <GameFunctions />
         }
     };
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import droplet from '../images/droplet.png';
 
 let x = 0;
     /**
@@ -92,57 +93,6 @@ function logic(n, fn) {
         return [nums, targetSum];
     }
 
-function allowDrop(ev) {
-    ev.preventDefault();
-}
-
-function drag(ev) {
-    ev.dataTransfer.setData("text/plain", ev.target.id);
-}
-
-function drop(ev) {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text/plain");
-    console.log("Dropping");
-    console.log(data);
-    ev.target.appendChild(document.getElementById(data));
-}
-
-export function AddTable2(props) {
-    if (x == 0) {
-        var values = logic(props.n, getWholeNumber);
-        var nums = values[0];
-        var targetSum = values[1];
-        if (props.n == 3) {
-            return (<table border="1">
-                <tbody>
-                    <tr>
-                        <td rowSpan={props.n + 1} width="75" onDrop={drop} onDragOver={allowDrop}>Player 1</td>
-                    </tr>
-                    <tr>
-                        <td id="1" width="75" draggable="true" onDragStart={drag}>1</td>
-                        <td id="2" width="75" draggable="true">2</td>    
-                        <td id="2" width="75" draggable="true">3</td>
-                        <td id="test" rowSpan="4" width="75">Player 2</td>        
-                    </tr>
-                    <tr>
-                        <td id="2" width="75" draggable="true">4</td>
-                        <td id="2" width="75" draggable="true">5</td>    
-                        <td id="2" width="75" draggable="true">6</td>        
-                    </tr>
-                    <tr>
-                        <td id="2" width="75" draggable="true">7</td>
-                        <td id="2" width="75" draggable="true">8</td>    
-                        <td id="2" width="75" draggable="true">9</td>        
-                    </tr>
-                </tbody>
-                </table>
-                )
-        }
-
-        x++;
-    }
-}
 
 export function AddTable(props) {
     if (x === 0) {
@@ -180,8 +130,6 @@ export function AddTable(props) {
         tableBody.appendChild(tr1);
         tr1.appendChild(td1);
         td1.setAttribute('rowspan', props.n+1);
-        td1.addEventListener("dragover", allowDrop);
-        td1.addEventListener("drop", drop);
         td1.width='75';
 
         var c = 0;
@@ -194,7 +142,6 @@ export function AddTable(props) {
                 td.width = '75';
                 td.appendChild(document.createTextNode(nums[c]));
                 td.setAttribute('draggable', 'true');
-                td.addEventListener('dragstart', drag)
                 tr.appendChild(td);
                 if (c == 9) {
                     var td2 = document.createElement('TD');
@@ -211,13 +158,38 @@ export function AddTable(props) {
     }
 }
 
-//TODO: Create table of drag and droppable objects
-
 class GameFunctions extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            tasks: [
+            ],
+            target: 0,
+            players: props.players,
+            n: Math.sqrt(props.n),
+            difficulty: props.difficulty
         };
+        console.log("Difficulty", this.state.difficulty);
+        console.log("Number of players", this.state.players);
+        console.log("Number", this.state.n);
+        const COLORS = [
+            'red',
+            'green',
+            'blue',
+            'yellow',
+            'cyan',
+          ];
+        var values = logic(this.state.n, getWholeNumber);
+        var nums = values[0];
+        var targetSum = values[1];
+        this.target = targetSum;
+        var i = 0;
+        for (i = 0; i < nums.length; i++) {
+            this.state.tasks.push({id: i,
+                 name: nums[i], 
+                 category: "board", 
+                 bgcolor: COLORS[Math.floor(Math.random() * COLORS.length)]})
+        }
     };
 
     onDragStart = (ev, id) => {
@@ -231,25 +203,152 @@ class GameFunctions extends React.Component {
 
     onDrop = (ev, cat) => {
        let id = ev.dataTransfer.getData("id");
+       console.log(id)
        
-    //    let tasks = this.state.tasks.filter((task) => {
-    //        if (task.name == id) {
-    //            task.category = cat;
-    //        }
-    //        return task;
-    //    });
+       let tasks = this.state.tasks.filter((task) => {
+           if (task.id == id) {
+               task.category = cat;
+           }
+           return task;
+       });
 
-    //    this.setState({
-    //        ...this.state,
-    //        tasks
-    //    });
+       this.setState({
+           ...this.state,
+           tasks
+       });
     }
 
+
     render() {
-        return ( 
-            <div>
-                <AddTable2 n={3}/>
-            </div>
+        const n = this.state.n;
+        var tasks = {
+            board: [],
+            p1: [],
+            p2: []
+        }
+
+        this.state.tasks.forEach ((t) => {
+            tasks[t.category].push(
+                <div key={t.id} 
+                    onDragStart = {(e) => this.onDragStart(e, t.id)}
+                    draggable
+                    className="draggable"
+                    style = {{backgroundImage: `url(${droplet})`,
+                        border: '1px solid black',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        color: 'white'}}
+                >
+                    {t.name}
+                </div>
+            );
+        });
+
+
+        const myStyle = {
+            display: 'inline-grid',
+            gridTemplateColumns: '20% auto 20%',
+            gridTemplateRows: '100px 1fr',
+            gridColumnGap: '20px',
+            backgroundColor: '#2196F3',
+            marginLeft: '50%',
+            transform: 'translateX(-50%)',
+            height: '80vh',
+            width: '80vw',
+            justifyContent: 'stretch',
+            border: '2.5px solid black',
+        };
+
+        const board3 = {
+            display: 'inline-grid',
+            gridTemplateColumns: 'repeat(3, auto)',
+            gridColumnGap: '20px',
+            gridRowGap: '20px',
+            textAlign: 'center',
+            verticalAlign: 'middle',
+            gridColumnStart: '2',
+            gridColumnEnd: '3',
+            gridRowStart: '2',
+            gridRowEnd: '3',
+            border: '0.5px solid black'
+        }
+        
+        const board4 = {
+            display: 'inline-grid',
+            gridTemplateColumns: 'repeat(4, auto)',
+            gridColumnGap: '20px',
+            gridRowGap: '20px',
+            textAlign: 'center',
+            verticalAlign: 'middle',
+            gridColumnStart: '2',
+            gridColumnEnd: '3',
+            gridRowStart: '2',
+            gridRowEnd: '3',
+            border: '0.5px solid black'
+        }
+
+        const title = {
+            fontSize: '40px' ,
+            textAlign: 'center',
+            gridColumnStart: '2',
+            gridColumnEnd: '3',
+            padding: '0px',
+            margin: '0px',
+        };
+
+        const subTitle = {
+            fontSize: '30px',
+            textAlign: 'center',
+            padding: '0px 0px 20px 0px'
+        };
+
+        const player1Style={
+            gridColumnStart: '1',
+            gridColumnEnd: '2',
+            gridRowStart: '1',
+            gridRowEnd: '3',
+            backgroundColor: "white"
+        }
+
+        const player2Style={
+            gridColumnStart: '3',
+            gridColumnEnd: '4',
+            gridRowStart: '1',
+            gridRowEnd: '3',
+            backgroundColor: "white"
+        }
+
+        return (
+            <div style={myStyle}>
+                    <div className="player1" style={player1Style}
+                        onDragOver={(e)=>this.onDragOver(e)}
+                        onDrop={(e)=>this.onDrop(e, "p1")}>
+                        <div className="task-header" style={subTitle}>Player 1</div>
+                        {tasks.p1}
+                    </div>
+                    <h2 className="header" style={title}>Target Sum {this.target}</h2>
+
+                    {n === 3 ? (<div className="board" style={board3}
+                        onDragOver={(e)=>this.onDragOver(e)}
+                        onDrop={(e)=>{this.onDrop(e, "board")}}>
+                        {tasks.board}
+                    </div>) : (
+                        <div className="board" style={board4}
+                        onDragOver={(e)=>this.onDragOver(e)}
+                        onDrop={(e)=>{this.onDrop(e, "board")}}>
+                        {tasks.board}
+                    </div>)}
+                    
+                    <div className="player2" style={player2Style}
+                        onDragOver={(e)=>this.onDragOver(e)}
+                        onDrop={(e)=>this.onDrop(e, "p2")}>
+                        <div className="task-header" style={subTitle}>Player 2</div>
+                        {tasks.p2}
+                    </div>
+            </div> 
         )
     }
 }

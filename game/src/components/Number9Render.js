@@ -11,11 +11,17 @@ class Number9Render extends React.Component {
 
     render(){
         const numberStyle = {
-            width: '35%',
+            display: 'block',
+            margin: 'auto',
+            height: '80%',
+            width: 'auto'
         }
 
         const numberStyleSelected = {
-            width: '35%',
+            display: 'block',
+            margin: 'auto',
+            height: '80%',
+            width: 'auto'
         }
 
         if(this.props.size == '9'){

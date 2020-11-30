@@ -14,12 +14,19 @@ class MediumButton extends React.Component {
 
     render(){
         const mediumStyle = {
-            marginLeft: '20%'
+            display: 'block',
+            margin: 'auto',
+            height: '80%',
+            width: 'auto',
+            gridTemplateColumns: '1fr 1fr'
         }
 
         const mediumStyleSelected = {
-            marginLeft: '20%',
-            border: '0px solid blue',
+            display: 'block',
+            margin: 'auto',
+            height: '80%',
+            width: 'auto',
+            border: '1px solid coral'
         }
 
         if(this.props.difficulty =='medium'){

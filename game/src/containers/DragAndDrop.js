@@ -4,11 +4,13 @@ class DragAndDrop extends React.Component {
     state = {
 
         tasks: [
-            {name:"Learn Angular",category:"wip", bgcolor: "yellow"},
-            {name:"React", category:"wip", bgcolor:"pink"},
-            {name:"Vue", category:"complete", bgcolor:"skyblue"}
+            {name:"Learn Angular",category:"board", bgcolor: "yellow"},
+            {name:"React", category:"board", bgcolor:"pink"},
+            {name:"Vue", category:"p1", bgcolor:"skyblue"}
           ]
     }
+
+
 
     onDragStart = (ev, id) => {
         console.log('dragstart:',id);
@@ -37,8 +39,9 @@ class DragAndDrop extends React.Component {
 
     render() {
         var tasks = {
-            wip: [],
-            complete: []
+            board: [],
+            p1: [],
+            p2: []
         }
 
         this.state.tasks.forEach ((t) => {
@@ -57,17 +60,23 @@ class DragAndDrop extends React.Component {
         return (
             <div className="container-drag">
                 <h2 className="header">DRAG & DROP DEMO</h2>
-                <div className="wip"
+                <div className="board"
                     onDragOver={(e)=>this.onDragOver(e)}
-                    onDrop={(e)=>{this.onDrop(e, "wip")}}>
-                    <span className="task-header">WIP</span>
-                    {tasks.wip}
+                    onDrop={(e)=>{this.onDrop(e, "board")}}>
+                    <span className="task-header">BOARD</span>
+                    {tasks.board}
                 </div>
-                <div className="droppable" 
+                <div className="player1" 
                     onDragOver={(e)=>this.onDragOver(e)}
-                    onDrop={(e)=>this.onDrop(e, "complete")}>
-                     <span className="task-header">COMPLETED</span>
-                     {tasks.complete}
+                    onDrop={(e)=>this.onDrop(e, "p1")}>
+                     <span className="task-header">Player 1</span>
+                     {tasks.p1}
+                </div>
+                <div className="player2" 
+                    onDragOver={(e)=>this.onDragOver(e)}
+                    onDrop={(e)=>this.onDrop(e, "p2")}>
+                     <span className="task-header">Player 2</span>
+                     {tasks.p2}
                 </div>
 
 
