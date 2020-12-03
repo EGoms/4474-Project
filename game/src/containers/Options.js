@@ -5,7 +5,6 @@ import Image from '../components/Image';
 import Title from '../components/Title';
 import OptionsTitle from '../images/options.png';
 import GameFunctions from './GameFunctions';
-import GameBoard from './GameBoard';
 import easy from '../images/easy.png';
 import medium from '../images/medium.png';
 import hard from '../images/hard.png';
@@ -189,22 +188,26 @@ class Options extends React.Component {
         // Render options screen
         if(!this.state.startGame){
             return (
-                <div style={myStyle}>
-                    <div style={titleStyle}><img style={imageStyle} src={OptionsTitle}/></div>
-                    <div class="column" style={columnStyle}>
-                        <div style={subTitle}>Difficulty</div>
-                        <div onClick={this.easy} style={cellStyle}><EasyButton difficulty={this.state.selectedDifficulty}/></div>
-                        <div onClick={this.medium} style={cellStyle}><MediumButton difficulty={this.state.selectedDifficulty}/></div>
-                        <div onClick={this.hard} style={cellStyle}><HardButton difficulty={this.state.selectedDifficulty}/></div>
+                <div>
+                    <div style={myStyle}>
+                        <div style={titleStyle}><img style={imageStyle} src={OptionsTitle}/></div>
+                        <div class="column" style={columnStyle}>
+                            <div style={subTitle}>Difficulty</div>
+                            <div onClick={this.easy} style={cellStyle}><EasyButton difficulty={this.state.selectedDifficulty}/></div>
+                            <div onClick={this.medium} style={cellStyle}><MediumButton difficulty={this.state.selectedDifficulty}/></div>
+                            <div onClick={this.hard} style={cellStyle}><HardButton difficulty={this.state.selectedDifficulty}/></div>
+                        </div>
+                        
+                        <div class="column" style={columnStyle}>
+                            <div style={subTitle}>Board Size</div>
+                            <div onClick={this.playGame} style={continueCellStyle}><ContinueButtonComponent/></div>
+                            <div onClick={this.numberNine} style={cellStyle}> <Number9Render size={this.state.size}/></div>
+                            <div onClick={this.numberSixteen} style={cellStyle}> <Number16Render size={this.state.size}/></div>
+                            <div onClick={this.playGame} style={continueCellStyle}><ContinueButtonComponent/></div>
+                        </div>
                     </div>
                     <input onClick={this.goBack} style={backButtonStyle} src={back} type="image"  name="backbutton"/>
-                    <div class="column" style={columnStyle}>
-                        <div style={subTitle}>Board Size</div>
-                        <div onClick={this.playGame} style={continueCellStyle}><ContinueButtonComponent/></div>
-                        <div onClick={this.numberNine} style={cellStyle}> <Number9Render size={this.state.size}/></div>
-                        <div onClick={this.numberSixteen} style={cellStyle}> <Number16Render size={this.state.size}/></div>
-                        <div onClick={this.playGame} style={continueCellStyle}><ContinueButtonComponent/></div>
-                    </div>
+                    
                 </div>
             )
         }

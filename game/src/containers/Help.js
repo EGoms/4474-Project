@@ -57,6 +57,19 @@ class Help extends React.Component {
         const backImageStyle = {
             width: '50%'
         }
+
+        const backButtonStyle = {
+            display: 'block',
+            //float: 'left',
+            position: 'absolute',
+            width: '4%',
+            height: 'auto',
+            bottom: '2%',
+            left: '1%'
+            //border: '1px solid black'
+            //marginLeft: '0px'
+        }
+
         const goBackStyle = {
             display: 'block',
             position:"absolute",
@@ -90,29 +103,28 @@ class Help extends React.Component {
 
         if(this.state.display){
             return(
-                <div style={myStyle}>
-                    <div style={titleStyle}>
-                        <img style={imageStyle} src={helpTitle}/>
+                <div>
+                    <div style={myStyle}>
+                        <div style={titleStyle}>
+                            <img style={imageStyle} src={helpTitle}/>
+                        </div> 
+                        <div style={leftColumn}> 
+                            <div style={helpText}>
+                                <p><br/><br/>At the beginning of this game, the players will be presented with a target sum at the top of the screen. This is the sum you want to reach by 
+                                    selecting 3 numbers from the board. You must reach this sum with exactly 3 numbers, no more and no fewer. Players take turns selecting numbers 
+                                    from the center of the screen by dragging and dropping the desired number to your side of the board. Once you drop the number you selected on your 
+                                    side of the board, you will notice your glass will fill with water, and the number you selected will be added to your glass. The first player to 
+                                    reach the target sum with their 3 chosen numbers wins! If neither player reaches the target sum after selecting 3 numbers each, then the game is 
+                                    in a stalemate and a draw is declared.</p></div>
+                        </div> 
+                        <div style={rightColumn}>
+                            <div style={vidStyle}>
+                                    <HelpVid />
+                                </div>
+                            </div>            
                     </div> 
-                    <div style={leftColumn}> 
-                        <div style={helpText}>
-                            <p><br/><br/>At the beginning of this game, the players will be presented with a target sum at the top of the screen. This is the sum you want to reach by 
-                                selecting 3 numbers from the board. You must reach this sum with exactly 3 numbers, no more and no fewer. Players take turns selecting numbers 
-                                from the center of the screen by dragging and dropping the desired number to your side of the board. Once you drop the number you selected on your 
-                                side of the board, you will notice your glass will fill with water, and the number you selected will be added to your glass. The first player to 
-                                reach the target sum with their 3 chosen numbers wins! If neither player reaches the target sum after selecting 3 numbers each, then the game is 
-                                in a stalemate and a draw is declared.</p></div>
-                        <div style={goBackStyle}>
-                            <input style={backImageStyle} onClick={this.goBack} src={back} type="image"  name="helpbutton"/>
-                        </div>
-                        
-                    </div> 
-                    <div style={rightColumn}>
-                        <div style={vidStyle}>
-                                <HelpVid />
-                            </div>
-                        </div>            
-                </div> 
+                    <input style={backButtonStyle} onClick={this.goBack} src={back} type="image"  name="helpbutton"/>
+                </div>
             )
         }
         else if (this.state.goBack){

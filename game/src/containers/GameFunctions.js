@@ -1,5 +1,7 @@
 import React from 'react';
+import Options from '../containers/Options.js';
 import droplet from '../images/droplet.png';
+import back from '../images/back_arrow.png';
 
 let x = 0;
     /**
@@ -124,8 +126,11 @@ class GameFunctions extends React.Component {
             n: Math.sqrt(props.n),
             difficulty: props.difficulty,
             player1Sum: 0,
-            player2Sum: 0
+            player2Sum: 0,
+            player1Moves: 0,
+            player2Moves: 0
         };
+        this.goBack = this.goBack.bind(this);
         console.log("Difficulty", this.state.difficulty);
         console.log("Number of players", this.state.players);
         console.log("Number", this.state.n);
@@ -136,11 +141,10 @@ class GameFunctions extends React.Component {
             'yellow',
             'cyan',
           ];
-        console.log(this.state);
         var values = logic(this.state);
         var nums = values[0];
         var targetSum = values[1];
-        this.target = targetSum;
+        this.state.target = targetSum;
         var i = 0;
         for (i = 0; i < nums.length; i++) {
             this.state.tasks.push({id: i,
@@ -161,7 +165,6 @@ class GameFunctions extends React.Component {
 
     onDrop = (ev, cat) => {
        let id = ev.dataTransfer.getData("id");
-       console.log(id)
        
        let tasks = this.state.tasks.filter((task) => {
            if (task.id == id) {
@@ -174,6 +177,67 @@ class GameFunctions extends React.Component {
            ...this.state,
            tasks
        });
+    }
+
+    onDropP1 = (ev, cat) => {
+        //Check if possible to make another selection
+        if (this.state.player1Moves >= this.state.n) {
+            alert("Already made maximum moves", this.state.n);
+            return;
+        }
+        let id = ev.dataTransfer.getData("id");
+        var s;
+        let tasks = this.state.tasks.filter((task) => {
+            if (task.id == id) {
+                task.category = cat;
+                s = task.name;
+                this.state.player1Moves++;  //Made selection so count it
+            }
+            return task;
+        });
+        this.state.player1Sum = this.state.player1Sum + s;  //Add the selecred number to the sum for the player
+        this.setState({
+            ...this.state,
+            tasks
+        });
+
+        if (this.state.player1Sum == this.state.target) {   //If the player's sum matches target
+            alert("Player 1 Wins"); //Change to render new screen
+        }
+     }
+
+     onDropP2 = (ev, cat) => {
+        if (this.state.player2Moves >= this.state.n) {
+            alert("Already made maximum moves", this.state.n);
+            return;
+        }
+        let id = ev.dataTransfer.getData("id");
+        var s;
+        let tasks = this.state.tasks.filter((task) => {
+            if (task.id == id) {
+                task.category = cat;
+                s = task.name;
+                this.state.player2Moves++;
+            }
+            return task;
+        });
+        this.state.player2Sum = this.state.player2Sum + s;
+        this.setState({
+            ...this.state,
+            tasks
+        });
+
+        if (this.state.player2Sum == this.state.target) {
+            alert("Player 2 Wins");
+        }
+     }
+
+
+    goBack(){
+        this.setState({
+            goBack: true,
+            display: false
+        })
     }
 
 
@@ -205,7 +269,7 @@ class GameFunctions extends React.Component {
             );
         });
 
-
+        
         const myStyle = {
             display: 'inline-grid',
             gridTemplateColumns: '20% auto 20%',
@@ -285,15 +349,39 @@ class GameFunctions extends React.Component {
             borderLeft: '5px solid black'
         }
 
+        const backButtonStyle = {
+            display: 'block',
+            //float: 'left',
+            position: 'absolute',
+            width: '4%',
+            height: 'auto',
+            bottom: '2%',
+            left: '1%'
+        }
+
+        if (this.state.goBack)
+        {
+            if (this.props.inGame)
+            {
+                return <GameFunctions />
+            }
+            else
+            {
+                return <Options />
+            };
+        };
+        
         return (
-            <div style={myStyle}>
+            <div>
+                <div style={myStyle}>
                     <div className="player1" style={player1Style}
                         onDragOver={(e)=>this.onDragOver(e)}
-                        onDrop={(e)=>this.onDrop(e, "p1")}>
+                        onDrop={(e)=>this.onDropP1(e, "p1")}>
                         <div className="task-header" style={subTitle}>Player 1</div>
                         {tasks.p1}
+                        {this.state.player1Sum}
                     </div>
-                    <h2 className="header" style={title}>Target Sum {this.target}</h2>
+                    <h2 className="header" style={title}>Target Sum {this.state.target}</h2>
 
                     {n === 3 ? (<div className="board" style={board3}
                         onDragOver={(e)=>this.onDragOver(e)}
@@ -308,11 +396,14 @@ class GameFunctions extends React.Component {
                     
                     <div className="player2" style={player2Style}
                         onDragOver={(e)=>this.onDragOver(e)}
-                        onDrop={(e)=>this.onDrop(e, "p2")}>
+                        onDrop={(e)=>this.onDropP2(e, "p2")}>
                         <div className="task-header" style={subTitle}>Player 2</div>
                         {tasks.p2}
+                        {this.state.player2Sum}
                     </div>
-            </div> 
+                </div>
+                <input onClick={this.goBack} style={backButtonStyle} src={back} type="image"  name="backbutton"/>
+            </div>
         )
     }
 }

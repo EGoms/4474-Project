@@ -33,6 +33,7 @@ class GameContainer extends React.Component {
             helpScreen: true,
             });
     }
+    
     showOpponent(){
         console.log('Changing to Opponent Screen');
         this.setState({
