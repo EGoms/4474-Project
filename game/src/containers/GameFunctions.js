@@ -113,70 +113,6 @@ function logic(state) {
     }
 
 
-export function AddTable(props) {
-    if (x === 0) {
-        var values = logic(props.n, getWholeNumber);
-        var nums = values[0];
-        var targetSum = values[1];
-        var container = document.getElementById("root");
-        
-        var div = document.createElement("div");
-        div.innerHTML = targetSum;
-        div.style.position = "absolute";
-        div.style.top = "35%";
-        div.style.left = "50%";
-        container.append(div);
-
-        var div2 = document.createElement("div");
-        div2.style.position = "absolute";
-        div2.style.top = "50%";
-        div2.style.left = "45%";
-
-        var table;
-        if (document.getElementById("table")) {
-            table = document.getElementById("table");
-        } else {
-            table = document.createElement("table");
-        }
-        table.border=1;
-
-        var tableBody = document.createElement("TBODY");
-        table.appendChild(tableBody);
-
-
-        var tr1 = document.createElement('TR');
-        var td1 = document.createElement('TD');
-        tableBody.appendChild(tr1);
-        tr1.appendChild(td1);
-        td1.setAttribute('rowspan', props.n+1);
-        td1.width='75';
-
-        var c = 0;
-        for (var i = 0; i < props.n; i++) {
-            var tr = document.createElement('TR');
-            tableBody.appendChild(tr);
-
-            for (var j = 0; j < props.n; j++, c++) {
-                var td = document.createElement('TD');
-                td.width = '75';
-                td.appendChild(document.createTextNode(nums[c]));
-                td.setAttribute('draggable', 'true');
-                tr.appendChild(td);
-                if (c == 9) {
-                    var td2 = document.createElement('TD');
-                    td2.setAttribute('rowspan', props.n+1);
-                    td2.width='75';
-                    tr.appendChild(td2);
-                }
-            }
-        }
-
-        div2.appendChild(table);
-        container.append(div2);
-        x = 1;
-    }
-}
-
 class GameFunctions extends React.Component {
     constructor(props) {
         super(props);
@@ -190,52 +126,6 @@ class GameFunctions extends React.Component {
             player1Sum: 0,
             player2Sum: 0
         };
-        console.log("Difficulty", this.state.difficulty);
-        console.log("Number of players", this.state.players);
-        console.log("Number", this.state.n);
-        const COLORS = [
-            'red',
-            'green',
-            'blue',
-            'yellow',
-            'cyan',
-          ];
-        console.log(this.state);
-        var values = logic(this.state);
-        var nums = values[0];
-        var targetSum = values[1];
-        this.target = targetSum;
-        var i = 0;
-        for (i = 0; i < nums.length; i++) {
-            this.state.tasks.push({id: i,
-                 name: nums[i], 
-                 category: "board", 
-                 bgcolor: COLORS[Math.floor(Math.random() * COLORS.length)]})
-        }
-    };
-        console.log("Difficulty", this.state.difficulty);
-        console.log("Number of players", this.state.players);
-        console.log("Number", this.state.n);
-        const COLORS = [
-            'red',
-            'green',
-            'blue',
-            'yellow',
-            'cyan',
-          ];
-        console.log(this.state);
-        var values = logic(this.state);
-        var nums = values[0];
-        var targetSum = values[1];
-        this.target = targetSum;
-        var i = 0;
-        for (i = 0; i < nums.length; i++) {
-            this.state.tasks.push({id: i,
-                 name: nums[i], 
-                 category: "board", 
-                 bgcolor: COLORS[Math.floor(Math.random() * COLORS.length)]})
-        }
-    };
         console.log("Difficulty", this.state.difficulty);
         console.log("Number of players", this.state.players);
         console.log("Number", this.state.n);
