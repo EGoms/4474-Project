@@ -7,7 +7,7 @@ import Options from './Options';
 import Opponent from './Opponent';
 import GameFunctions from './GameFunctions';
 import Play from '../images/play.png'
-import water from '../images/water.png';
+import backGround from '../images/backgroundOption3.jpg';
 
 // This class is used as the outermost container for the game. Inside will be the game 
 // board (a smaller container), and the persistent buttons in the corners (state dependent)
@@ -59,42 +59,47 @@ class GameContainer extends React.Component {
     render() {
         const myStyle = {
             display: 'inline-grid',
-            gridTemplateColumns: '10% auto 10%',
-            gridTemplateColumns: 'auto auto',
+            gridTemplateColumns: '15% auto 15%',
+            gridTemplateRows: '50% auto',
             backgroundColor: '#2196F3',
-            marginLeft: '50%',
-            transform: 'translateX(-50%)',
-            height: '80vh',
-            width: '80vw',
-            backgroundColor: 'pink',
-            backgroundImage: 'url('+water+')',
+            height: '100vh',
+            width: '100vw',
+            borderRadius: '10px',
+            //marginLeft: '10%',
+            //marginTop: '5%',
+            // backgroundColor: 'pink',
+            backgroundImage: 'url('+backGround+')',
             backgroundSize: '100%',
         };
 
-        const PlayButtonStyle = {
-            width: '20%',
+        const playButtonDiv = {
+            gridColumnStart: '2',
+            gridColumnEnd: '3',
             height: 'auto',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            marginTop:'25px',
+        };
+
+        const helpButtonDiv = {
+            gridColumnStart: '3',
+            gridColumnEnd: '4',
         };
 
         const helpButtonStyle = {
-            position: 'absolute',
-            display: 'flex',
-            width: '10%',
-            height: 'auto',
-            bottom: '2%',
-            right: '2%',
-
-        };
+            display: 'block',
+            marginTop: '130%',
+            marginRight: '8.3%',
+            float: 'Right'
+        }
 
         const titleStyle = {
             gridColumnStart: '2',
             gridColumnEnd: '3',
-            padding: '5%',
-            margin: '0px',
-            border: '5px solid black'
+            //border: '5px solid black'
+        };
+
+        const playButtonStyle = {
+            display: 'block',
+            marginTop: '10%',
+            marginLeft: '40%'
         };
 
         if (this.state.helpScreen){
@@ -113,8 +118,8 @@ class GameContainer extends React.Component {
             return (
                 <div style={myStyle}>
                     <div style={titleStyle}><Title /></div>
-                    <div><input onClick={this.showOpponent} style={PlayButtonStyle} type="image" src={Play} name="PlayButton"/></div>
-                    <div><input onClick={this.showHelp} style={helpButtonStyle} type="image" src={help} name="helpbutton"/></div>
+                    <div style ={playButtonDiv}><input style={playButtonStyle} onClick={this.showOpponent} type="image" src={Play} name="PlayButton"/></div>
+                    <div style={helpButtonDiv}><input style={helpButtonStyle} onClick={this.showHelp}  type="image" src={help} name="helpbutton"/></div>
                 </div>
             )
         }; 

@@ -1,5 +1,6 @@
 import React from 'react';
 import medium from '../images/medium.png';
+import mediumSelected from '../images/medium-highlighted.png'
 
 
 class MediumButton extends React.Component {
@@ -15,23 +16,24 @@ class MediumButton extends React.Component {
     render(){
         const mediumStyle = {
             display: 'block',
-            margin: 'auto',
-            height: '80%',
+            margin: '1% auto',
+            height: '75%',
             width: 'auto',
-            gridTemplateColumns: '1fr 1fr'
+            gridTemplateColumns: '1fr 1fr',
+            outline: 'none'
         }
 
         const mediumStyleSelected = {
             display: 'block',
-            margin: 'auto',
-            height: '80%',
+            margin: '1% auto',
+            height: '75%',
             width: 'auto',
-            border: '1px solid coral'
+            outline: 'none'
         }
 
         if(this.props.difficulty =='medium'){
             return(
-                <input  style={mediumStyleSelected} type="image" src={medium} name="medium"/>
+                <input  style={mediumStyleSelected} type="image" src={mediumSelected} name="medium"/>
             )
         }
         else{

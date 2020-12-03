@@ -1,5 +1,6 @@
 import React from 'react';
 import sixteen from '../images/sixteen.png';
+import sixteenSelected from '../images/sixteen-highlighted.png';
 
 class Number16Render extends React.Component {
     constructor(props) {
@@ -12,21 +13,23 @@ class Number16Render extends React.Component {
     render(){
         const numberStyle = {
             display: 'block',
-            margin: 'auto',
-            height: '80%',
-            width: 'auto'
+            margin: '1% auto',
+            height: '75%',
+            width: 'auto',
+            outline: 'none'
         }
 
         const numberStyleSelected = {
             display: 'block',
-            margin: 'auto',
-            height: '80%',
-            width: 'auto'
+            margin: '1% auto',
+            height: '75%',
+            width: 'auto',
+            outline: 'none'
         }
 
         if(this.props.size == 16){
             return(
-                <input style={numberStyle} type="image" src={sixteen} name="NumberSixteen"/>
+                <input style={numberStyle} type="image" src={sixteenSelected} name="NumberSixteen"/>
             )
         }
         else{

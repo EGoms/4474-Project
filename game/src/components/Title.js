@@ -6,22 +6,19 @@ import cartoon from '../images/waterCartoon.png';
 class Title extends React.Component {
     render() {
         const cartoonStyle = {
-            width: '10%',
+            width: '17%',
             marginLeft: '1%'
         }
         return ( 
-            <div className="ui container" style={{textAlign: 'center'}}>
+            <div style={{textAlign:'center'}}>
                 <img src={title} 
                     style=
                         {{
-                            // display: 'block',
-                            height: 'auto',
-                            marginLeft: 'auto',
-                            marginRight: 'auto',
-                            marginTop: '8%',
-                            width: 'auto',
-                            height: '225px',
-                            textAlign: 'center',
+                            display: 'inline',
+                            height: '40%',
+                            width: '40%',
+                            marginTop: '9.65265%',   //plz hal                      
+                            textAlign: 'center'
                         }}
                 />
                 <img src={cartoon} style={cartoonStyle}/>

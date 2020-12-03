@@ -15,8 +15,10 @@ class HelpVid extends React.Component {
     render(){ 
 
         const vidStyle = {
-            height: '100%',
-            width: '100%'
+            height: 'auto',
+            width: '90%',
+            marginTop: '12.5%',
+            marginLeft: '5%'
         }
         return(
                 <video style={vidStyle} controls>   

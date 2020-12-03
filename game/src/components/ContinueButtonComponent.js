@@ -11,8 +11,9 @@ class ContinueButtonComponent extends React.Component {
 
     render(){
         const buttonStyle = {
-            // display: 'block',
-            height: '50%',
+            display: 'block',
+            margin: '10% 5%',
+            height: '40%',
             width: 'auto',
             float: 'right'
         }

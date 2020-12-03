@@ -1,5 +1,6 @@
 import React from 'react';
 import easy from '../images/easy.png';
+import easySelected from '../images/easy-highlighted.png'
 
 
 class EasyButton extends React.Component {
@@ -15,22 +16,23 @@ class EasyButton extends React.Component {
     render(){
         const easyStyle = {
             display: 'block',
-            margin: 'auto',
-            height: '80%',
-            width: 'auto'
+            margin: '1% auto',
+            height: '75%',
+            width: 'auto',
+            outline: 'none'
         }
 
         const easyStyleSelected = {
             display: 'block',
-            margin: 'auto',
-            height: '80%',
+            margin: '1% auto',
+            height: '75%',
             width: 'auto',
-            border: '1px solid coral'
+            outline: 'none'
         }
 
         if(this.props.difficulty =='easy'){
             return(
-                <input style={easyStyleSelected} type="image" src={easy} name="Easy"/>
+                <input style={easyStyleSelected} type="image" src={easySelected} name="Easy"/>
             )
         }
         else{

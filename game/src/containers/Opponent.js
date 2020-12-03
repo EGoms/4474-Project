@@ -1,10 +1,13 @@
 import React from 'react';
 import Options from './Options';
+import GameContainer from './GameContainer'
 import GameFunctions from './GameFunctions';
 import GameBoard from './GameBoard';
 import friend from '../images/friend.png'
 import computer from '../images/computer.png'
 import DragAndDrop from './DragAndDrop';
+import back from '../images/back_arrow.png'
+import OpponentTitle from '../components/OpponentTitle';
 
 class Opponent extends React.Component {
  
@@ -18,7 +21,7 @@ class Opponent extends React.Component {
         };
         this.showOptionsCPU = this.showOptionsCPU.bind(this);
         this.showOptionsPVP = this.showOptionsPVP.bind(this);
-        //this.showGame = this.showGame.bind(this);
+        this.goBack = this.goBack.bind(this);
     };
 
     showOptionsCPU(){
@@ -39,36 +42,35 @@ class Opponent extends React.Component {
         });
     }
 
-    // showGame(){
-    //     console.log('Changing to Options');
-    //     this.setState({
-    //         options: false,
-    //         opponent: false,
-    //         game: true
-    //     });
-    // }
+    goBack(){
+        this.setState({
+            goBack: true,
+            display: false
+        })
+    }
 
     render() {
         const myStyle = {
-            display: 'grid',
-            margin: 'auto',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            position: 'fixed',
-            border: '5px solid black',
+            display: 'inline-grid',
+            marginLeft: '10%',
+            marginTop: '5%',
+            gridTemplateColumns: 'auto',
+            gridTemplateRows: '50% auto',
+            //transform: 'translateX(-50%)',
             borderRadius: '10px',
-            height: '90%',
-            width: '80%',
-            marginTop: '50px',
-            backgroundColor: 'lightblue',
-        }
+            position: 'absolute',
+            border: '5px solid black',
+            height: '80vh',
+            width: '80vw',
+            backgroundColor: '#27BBCA'
+        };
 
         const cpuButtonStyle = {
             width: '30%',
             height: '80%',
             marginLeft: 'auto',
             marginRight: 'auto'
-        }
+        };
 
         const playerButtonStyle = {
             width: '30%',
@@ -76,20 +78,48 @@ class Opponent extends React.Component {
             marginLeft: 'auto',
             marginRight: 'auto'
 
-        }
+        };
         
-        const title = {
-            fontSize: '80px',
-            textAlign: 'center'
+        const backButtonStyle = {
+            display: 'block',
+            //float: 'left',
+            position: 'absolute',
+            width: '4%',
+            height: 'auto',
+            bottom: '2%',
+            left: '1%'
+
         }
+
+        const title = {
+            display: 'block',
+            width: '60%',
+            marginLeft: 'auto',
+            marginRight: 'auto'
+        };
+
+        if (this.state.goBack)
+        {
+            if (this.props.inGame)
+            {
+                return <GameFunctions />
+            }
+            else
+            {
+                return <GameContainer />
+            };
+        };
 
         if (this.state.opponent)
         {
             return (
                 <div style={myStyle}>
-                    <div style={title}>Choose your Opponent</div>
-                    <input onClick={this.showOptionsPVP} style={playerButtonStyle} type="image" src={friend} name="helpbutton"/>
-                    <input onClick={this.showOptionsCPU} style={cpuButtonStyle} type="image" src={computer} name="helpbutton"/>
+                    <div style={title}>
+                        <OpponentTitle />
+                    </div>
+                    <input onClick={this.showOptionsPVP} style={playerButtonStyle} type="image" src={friend} name="playerpbutton"/>
+                    <input onClick={this.showOptionsCPU} style={cpuButtonStyle} type="image" src={computer} name="cpupbutton"/>
+                    <input onClick={this.goBack} style={backButtonStyle} src={back} type="image"  name="backbutton"/>
                 </div>
             );
         }

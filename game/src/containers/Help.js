@@ -26,72 +26,95 @@ class Help extends React.Component {
     render(){ 
         const myStyle = {
             display: 'grid',
-            margin: 'auto',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            position: 'fixed',
+            gridTemplateColumns: '50% auto',
+            gridTemplateRows: '25% auto',
+            marginLeft: '10%',
+            marginTop: '5%',
+            position: 'absolute',
             border: '5px solid black',
             borderRadius: '10px',
-            height: '90%',
-            width: '80%',
-            marginTop: '50px',
-            backgroundColor: 'lightblue'
+            height: '80vh',
+            width: '80vw',
+            backgroundColor: '#2196F3',
+            position: 'absolute'
         }
 
         const titleStyle = {
             display: 'block',
-            border: '3px solid rgba(0, 0, 0, 0.8)',
-            width: '30%',
-            height: 'auto',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            marginTop:'25px',
+            gridColumnStart: '1',
+            gridColumnEnd: '3',
+
         }
 
         const vidStyle = {
+            gridColumnStart: '2',
+            gridColumnEnd: '3',
+            height: '80%',
+            width: '100%'
+        }
+
+        const backImageStyle = {
+            width: '50%'
+        }
+        const goBackStyle = {
             display: 'block',
-            border: '3px solid rgba(0, 0, 0, 0.8)',
-            width: '60%',
-            height: 'auto',
-            margin: 'auto',
-            marginLeft: 'auto',
-            marginRight: 'auto',
+            position:"absolute",
+            bottom: '0',
+            left: '0',
+            marginLeft: '1%',
+            marginBottom: '1%'
         }
 
-        function MouseOver(event) {
-            event.target.style.border = '3px solid darkRed';
-            
+        const imageStyle = {
+            width: '18%',
+            marginLeft: '41%',
+            marginRight: '41%',
         }
 
-        function MouseOut(event){
-            event.target.style.border = 'none';
-        }
-    
-        const helpButtonStyle = {
-            display: 'flex',
-            borderRadius: '10px',
-            float: 'left',
+        const leftColumn = {
             position: 'absolute',
-            width: '50px',
-            height: 'auto',
-            bottom: '2%',
-            left: '2%',
-            marginLeft: '10px',
+            width: '100%',
+            position: 'static'
         }
 
+        const rightColumn = {
+            width: '100%',
+        }
 
+        const helpText = {
+            margin: '3%',
+            fontSize: '20px',
+            textAlign: 'justify'
+        }
 
         if(this.state.display){
             return(
                 <div style={myStyle}>
-                    <div className="ui container">
-                        <img src={helpTitle} style={titleStyle}
-                        />
-                    </div>
-                    <div style={vidStyle}>
-                        <HelpVid />
-                    </div>
-                    <input onClick={this.goBack} style={helpButtonStyle} onMouseOver={MouseOver} onMouseOut={MouseOut} src={back} type="image"  name="helpbutton"/>
+                    <div style={titleStyle}>
+                        <img style={imageStyle} src={helpTitle}/>
+                    </div> 
+                    <div style={leftColumn}> 
+                        <div style={helpText}>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                                 dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+                                  non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                                 dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+                                  non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        </div>
+                        <div style={goBackStyle}>
+                            <input style={backImageStyle} onClick={this.goBack} src={back} type="image"  name="helpbutton"/>
+                        </div>
+                        
+                    </div> 
+                    <div style={rightColumn}>
+                        <div style={vidStyle}>
+                                <HelpVid />
+                            </div>
+                        </div>            
                 </div> 
             )
         }

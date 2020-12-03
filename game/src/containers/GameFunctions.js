@@ -254,12 +254,15 @@ class GameFunctions extends React.Component {
             gridTemplateRows: '100px 1fr',
             gridColumnGap: '20px',
             backgroundColor: '#2196F3',
-            marginLeft: '50%',
-            transform: 'translateX(-50%)',
+            marginLeft: '10%',
+            marginTop: '5%',
+            //transform: 'translateX(-50%)',
             height: '80vh',
             width: '80vw',
+            position: 'absolute',
             justifyContent: 'stretch',
-            border: '2.5px solid black',
+            border: '5px solid black',
+            borderRadius: '10px'
         };
 
         const board3 = {
@@ -267,13 +270,14 @@ class GameFunctions extends React.Component {
             gridTemplateColumns: 'repeat(3, auto)',
             gridColumnGap: '20px',
             gridRowGap: '20px',
+            marginBottom: '1%',
             textAlign: 'center',
             verticalAlign: 'middle',
             gridColumnStart: '2',
             gridColumnEnd: '3',
             gridRowStart: '2',
             gridRowEnd: '3',
-            border: '0.5px solid black'
+            //border: '0.5px solid black'
         }
         
         const board4 = {
@@ -310,7 +314,8 @@ class GameFunctions extends React.Component {
             gridColumnEnd: '2',
             gridRowStart: '1',
             gridRowEnd: '3',
-            backgroundColor: "white"
+            backgroundColor: "white",
+            borderRight: '5px solid black'
         }
 
         const player2Style={
@@ -318,7 +323,8 @@ class GameFunctions extends React.Component {
             gridColumnEnd: '4',
             gridRowStart: '1',
             gridRowEnd: '3',
-            backgroundColor: "white"
+            backgroundColor: "white",
+            borderLeft: '5px solid black'
         }
 
         return (
