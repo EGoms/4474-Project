@@ -50,7 +50,8 @@ class Help extends React.Component {
             gridColumnStart: '2',
             gridColumnEnd: '3',
             height: '80%',
-            width: '100%'
+            width: '100%',
+            marginTop: '-7%'
         }
 
         const backImageStyle = {
@@ -95,16 +96,12 @@ class Help extends React.Component {
                     </div> 
                     <div style={leftColumn}> 
                         <div style={helpText}>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                                 dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                                  non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                                 dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                                  non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                        </div>
+                            <p><br/><br/>At the beginning of this game, the players will be presented with a target sum at the top of the screen. This is the sum you want to reach by 
+                                selecting 3 numbers from the board. You must reach this sum with exactly 3 numbers, no more and no fewer. Players take turns selecting numbers 
+                                from the center of the screen by dragging and dropping the desired number to your side of the board. Once you drop the number you selected on your 
+                                side of the board, you will notice your glass will fill with water, and the number you selected will be added to your glass. The first player to 
+                                reach the target sum with their 3 chosen numbers wins! If neither player reaches the target sum after selecting 3 numbers each, then the game is 
+                                in a stalemate and a draw is declared.</p></div>
                         <div style={goBackStyle}>
                             <input style={backImageStyle} onClick={this.goBack} src={back} type="image"  name="helpbutton"/>
                         </div>

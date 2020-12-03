@@ -65,16 +65,35 @@ function mostUsed(arr) {
         return Object.entries(arr).reduce((a, b) => a[1] > b[1] ? a : b)[0];
     }
 
+
+function generateNumbers(state) {
+    let n = state.n;
+    let difficulty = state.difficulty;
+    let nums = []
+    if (difficulty === "easy") {
+        for (let i = 0; i < n**2; i++) {
+            nums.push(getWholeNumber(1, n**2));
+        }
+    } else if (difficulty === "medium") {
+        for (let i = 0; i < n**2; i++) {
+            nums.push(getWholeNumber(-1*n**2, n**2));
+        }
+    } else {
+        for (let i = 0; i < n**2; i++) {
+            nums.push(getDecimalNumber(1, n**2));
+        }
+    }
+    return nums;
+}
     /**
      * Logic to build the game
      * @param {*} n - Should be user supplied either 3 or 4. Controls game size 
      * @param {*} fn - Function for what kind of numbers to choose (getWholeNumber / getDecimalNumber)
      */
-function logic(n, fn) {
-        let nums = [];  //Populate the numbers for the grid
-        for (let i = 0; i < n**2; i++) {    //n = 3,4 so numbers 1-9 or 16
-            nums.push(fn(1, n**2));  //todo move the function
-        }
+function logic(state) {
+        let n = state.n;
+        var nums = generateNumbers(state);
+        
         let combinations = k_combinations(nums, n);
         let sums = [];
         //Calculate the sum of each combinations
@@ -167,7 +186,9 @@ class GameFunctions extends React.Component {
             target: 0,
             players: props.players,
             n: Math.sqrt(props.n),
-            difficulty: props.difficulty
+            difficulty: props.difficulty,
+            player1Sum: 0,
+            player2Sum: 0
         };
         console.log("Difficulty", this.state.difficulty);
         console.log("Number of players", this.state.players);
@@ -179,7 +200,31 @@ class GameFunctions extends React.Component {
             'yellow',
             'cyan',
           ];
-        var values = logic(this.state.n, getWholeNumber);
+        console.log(this.state);
+        var values = logic(this.state);
+        var nums = values[0];
+        var targetSum = values[1];
+        this.target = targetSum;
+        var i = 0;
+        for (i = 0; i < nums.length; i++) {
+            this.state.tasks.push({id: i,
+                 name: nums[i], 
+                 category: "board", 
+                 bgcolor: COLORS[Math.floor(Math.random() * COLORS.length)]})
+        }
+    };
+        console.log("Difficulty", this.state.difficulty);
+        console.log("Number of players", this.state.players);
+        console.log("Number", this.state.n);
+        const COLORS = [
+            'red',
+            'green',
+            'blue',
+            'yellow',
+            'cyan',
+          ];
+        console.log(this.state);
+        var values = logic(this.state);
         var nums = values[0];
         var targetSum = values[1];
         this.target = targetSum;

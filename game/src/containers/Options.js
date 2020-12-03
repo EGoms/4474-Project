@@ -200,6 +200,7 @@ class Options extends React.Component {
                     <input onClick={this.goBack} style={backButtonStyle} src={back} type="image"  name="backbutton"/>
                     <div class="column" style={columnStyle}>
                         <div style={subTitle}>Board Size</div>
+                        <div onClick={this.playGame} style={continueCellStyle}><ContinueButtonComponent/></div>
                         <div onClick={this.numberNine} style={cellStyle}> <Number9Render size={this.state.size}/></div>
                         <div onClick={this.numberSixteen} style={cellStyle}> <Number16Render size={this.state.size}/></div>
                         <div onClick={this.playGame} style={continueCellStyle}><ContinueButtonComponent/></div>
@@ -210,8 +211,8 @@ class Options extends React.Component {
         else{
             return (
                 <div>
-                    <GameFunctions difficulty size players={this.state.players} n={this.state.size} players={this.state.players} />
-                    {/* <GameFunctions difficulty={this.state.difficulty} n={this.state.size} players={this.state.players} /> */}
+                    {/* <GameFunctions difficulty size players={this.state.players} n={this.state.size} players={this.state.players} /> */}
+                    <GameFunctions difficulty={this.state.selectedDifficulty} n={this.state.size} players={this.state.players} />
                 </div> 
             )
         };
