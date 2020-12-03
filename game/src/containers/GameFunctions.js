@@ -236,6 +236,29 @@ class GameFunctions extends React.Component {
                  bgcolor: COLORS[Math.floor(Math.random() * COLORS.length)]})
         }
     };
+        console.log("Difficulty", this.state.difficulty);
+        console.log("Number of players", this.state.players);
+        console.log("Number", this.state.n);
+        const COLORS = [
+            'red',
+            'green',
+            'blue',
+            'yellow',
+            'cyan',
+          ];
+        console.log(this.state);
+        var values = logic(this.state);
+        var nums = values[0];
+        var targetSum = values[1];
+        this.target = targetSum;
+        var i = 0;
+        for (i = 0; i < nums.length; i++) {
+            this.state.tasks.push({id: i,
+                 name: nums[i], 
+                 category: "board", 
+                 bgcolor: COLORS[Math.floor(Math.random() * COLORS.length)]})
+        }
+    };
 
     onDragStart = (ev, id) => {
         console.log('dragstart:',id);
