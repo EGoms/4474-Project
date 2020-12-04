@@ -1,10 +1,12 @@
 import React from 'react';
 import HelpVid from './HelpVid';
-
 import helpTitle from '../images/helpTitle.png'
 import back from '../images/back_arrow.png'
 import GameContainer from './GameContainer'
 import GameFunctions from './GameFunctions'
+import Opponent from './Opponent'
+import Options from './Options'
+import EndGame from './EndGame'
 
 class Help extends React.Component {
     constructor(props) {
@@ -12,7 +14,11 @@ class Help extends React.Component {
         this.state = {
             inGame: this.props.inGame,
             goBack: false,
-            display: true
+            display: true,
+            returnScreen: this.props.returnScreen,
+            size: props.n**2,
+            selectedDifficulty: props.difficulty,
+            players: props.players
         };
         this.goBack = this.goBack.bind(this);
     };
@@ -23,6 +29,7 @@ class Help extends React.Component {
             display: false
         })
     }
+
     render(){ 
         const myStyle = {
             display: 'grid',
@@ -62,10 +69,10 @@ class Help extends React.Component {
             display: 'block',
             //float: 'left',
             position: 'absolute',
-            width: '4%',
+            width: '3%',
             height: 'auto',
-            bottom: '2%',
-            left: '1%'
+            bottom: '2.6%',
+            left: '1.3%'
             //border: '1px solid black'
             //marginLeft: '0px'
         }
@@ -100,6 +107,7 @@ class Help extends React.Component {
             fontSize: '20px',
             textAlign: 'justify'
         }
+        
 
         if(this.state.display){
             return(
@@ -128,11 +136,22 @@ class Help extends React.Component {
             )
         }
         else if (this.state.goBack){
-            if (this.props.inGame){
-                return <GameFunctions />
+            //home, opponent, options, game, endGame
+            if(this.state.returnScreen == 'game'){
+                return <GameFunctions difficulty={this.state.selectedDifficulty} n={this.state.size} players={this.state.players}/>
             }
-            else{
+            else if(this.state.returnScreen == 'home'){
                 return <GameContainer />
+            }
+            else if(this.state.returnScreen == 'opponent'){
+                return <Opponent />
+            }
+            else if(this.state.returnScreen == 'options'){
+                console.log(this.state.players);
+                return <Options player={this.state.players}/>
+            }
+            else if(this.state.returnScreen == 'endGame'){
+                return <EndGame />
             }
         }
 

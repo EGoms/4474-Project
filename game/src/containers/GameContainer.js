@@ -21,6 +21,7 @@ class GameContainer extends React.Component {
           helpScreen: false,
           opponent: false,
           options: false,
+          returnScreen: 'home'
         };
         this.showHelp = this.showHelp.bind(this);
         this.showOpponent = this.showOpponent.bind(this);
@@ -82,12 +83,16 @@ class GameContainer extends React.Component {
         const helpButtonDiv = {
             gridColumnStart: '3',
             gridColumnEnd: '4',
+            gridRowStart: '2',
+            gridRowEnd: '3'
         };
 
         const helpButtonStyle = {
             display: 'block',
-            marginTop: '130%',
-            marginRight: '8.3%',
+            marginTop: '139%',
+            width: '33%',
+            height: 'auto',
+            marginRight: '8.7%',
             float: 'Right'
         }
 
@@ -104,7 +109,7 @@ class GameContainer extends React.Component {
         };
 
         if (this.state.helpScreen){
-            return <Help inGame={this.state.inGame}/>
+            return <Help returnScreen={'home'}/>
         }
         else if(this.state.inGame){
             return <GameFunctions />

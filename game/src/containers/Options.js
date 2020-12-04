@@ -1,6 +1,6 @@
 import React from 'react';
 import Opponent from './Opponent';
-import help from '../images/help.png';
+import Help from './Help';
 import Image from '../components/Image';
 import Title from '../components/Title';
 import OptionsTitle from '../images/options.png';
@@ -19,6 +19,7 @@ import DragAndDrop from '../containers/DragAndDrop';
 import Number9Render from '../components/Number9Render';
 import Number16Render from '../components/Number16Render';
 import ContinueButtonComponent from '../components/ContinueButtonComponent';
+import help from '../images/help.png';
 import back from '../images/back_arrow.png'
 
 
@@ -29,8 +30,11 @@ class Options extends React.Component {
             players: props.players,
             selectedDifficulty: 'easy',
             size: 9,
-            startGame: false
+            startGame: false,
+            helpscreen: false,
+            returnScreen: 'options'
         };
+        console.log(props);
         this.easy = this.easy.bind(this);
         this.medium = this.medium.bind(this);
         this.hard = this.hard.bind(this);
@@ -41,6 +45,7 @@ class Options extends React.Component {
         this.playGame = this.playGame.bind(this);
         this.makeGameSettings = this.makeGameSettings.bind(this);
 
+        this.showHelp = this.showHelp.bind(this);
         this.goBack = this.goBack.bind(this);
     };
 
@@ -93,6 +98,14 @@ class Options extends React.Component {
         this.setState({
             selectedDifficulty: 'hard',
         })
+    }
+
+    showHelp(){
+        console.log('Changing to helpscreen');
+        this.setState({
+            options: false,
+            helpScreen: true,
+            });
     }
 
     goBack(){
@@ -161,14 +174,24 @@ class Options extends React.Component {
             alignItems: 'center'
         }
 
+        const helpButtonStyle = {
+            display: 'block',
+            //float: 'left',
+            position: 'absolute',
+            width: '5%',
+            height: 'auto', 
+            bottom: '2.6%',
+            right: '1.3%'
+        }
+
         const backButtonStyle = {
             display: 'block',
             //float: 'left',
             position: 'absolute',
-            width: '4%',
+            width: '3%',
             height: 'auto',
-            bottom: '2%',
-            left: '1%'
+            bottom: '2.6%',
+            left: '1.3%'
             //border: '1px solid black'
             //marginLeft: '0px'
         }
@@ -184,6 +207,10 @@ class Options extends React.Component {
                 return <Opponent />
             };
         };
+
+        if (this.state.helpScreen){
+            return <Help returnScreen={'options'}/>
+        }
 
         // Render options screen
         if(!this.state.startGame){
@@ -207,7 +234,7 @@ class Options extends React.Component {
                         </div>
                     </div>
                     <input onClick={this.goBack} style={backButtonStyle} src={back} type="image"  name="backbutton"/>
-                    
+                    <input style={helpButtonStyle} onClick={this.showHelp}  type="image" src={help} name="helpbutton"/>
                 </div>
             )
         }

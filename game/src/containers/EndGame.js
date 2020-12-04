@@ -1,26 +1,29 @@
 import React from 'react';
 import Options from './Options';
-import Help from './Help';
-import GameContainer from './GameContainer'
+import Help from './Help.js';
 import GameFunctions from './GameFunctions';
-import friend from '../images/friend.png'
+import playAgain from '../images/friend.png' //change this to play again img
+import options from '../images/computer.png' //Change this to options img
+import title from '../components/OpponentTitle'; //Change this to endGame Title
 import help from '../images/help.png';
-import computer from '../images/computer.png'
-import DragAndDrop from './DragAndDrop';
 import back from '../images/back_arrow.png';
-import OpponentTitle from '../components/OpponentTitle';
 
-class Opponent extends React.Component {
- 
+class EndGame extends React.Component {
+// Pass this component the old game set up information. IE:
+    //difficulty
+    //size
+    //players
+
+    //Also include prop: winner={'NameOfWinner'}
+
     constructor(props) {
         super(props);
         this.state = {
-          opponent: true,
           options: false,
           game: false,
-          player: 1,
-          helpScreen: false,
-          returnScreen: 'opponent'
+          returnScreen: 'endGame',
+          winner: props.winner,
+          display: true
         };
         this.showHelp = this.showHelp.bind(this);
         this.showOptionsCPU = this.showOptionsCPU.bind(this);
@@ -28,7 +31,8 @@ class Opponent extends React.Component {
         this.goBack = this.goBack.bind(this);
     };
 
-    showOptionsCPU(){
+
+    showoptions(){
         console.log('Changing to Options CPU');
         this.setState({
             options: true,
@@ -37,22 +41,8 @@ class Opponent extends React.Component {
         });
     }
 
-    showOptionsPVP(){
-        console.log('Changing to Options PVP');
-        this.setState({
-            options: true,
-            opponent: false,
-            player: 2
-        });
-    }
 
-    showHelp(){
-        console.log('Changing to helpscreen');
-        this.setState({
-            opponent: false,
-            helpScreen: true,
-            });
-    }
+
 
     goBack(){
         this.setState({
@@ -96,10 +86,29 @@ class Opponent extends React.Component {
             display: 'block',
             //float: 'left',
             position: 'absolute',
-            width: '3%',
+            width: '4%',
             height: 'auto',
-            bottom: '2.6%',
-            left: '1.3%'
+            bottom: '2%',
+            left: '1%'
+        } 
+
+        const optionsButtonStyle = {
+            display: 'block',
+            //float: 'left',
+            position: 'absolute',
+            width: '4%',
+            height: 'auto',
+            bottom: '2%',
+            left: '1%'
+        } 
+        const playAgainButtonStyle = {
+            display: 'block',
+            //float: 'left',
+            position: 'absolute',
+            width: '4%',
+            height: 'auto',
+            bottom: '2%',
+            left: '1%'
         } 
 
         const helpButtonStyle = {
@@ -119,46 +128,39 @@ class Opponent extends React.Component {
             marginRight: 'auto'
         };
 
-        if (this.state.goBack)
-        {
-            if (this.props.inGame)
-            {
-                return <GameFunctions />
-            }
-            else
-            {
-                return <GameContainer />
-            };
-        };
+        
 
         if (this.state.helpScreen){
-            return <Help returnScreen={'opponent'}/>
+            return <Help returnScreen={'endGame'}/>
         }
-        
-        if (this.state.opponent)
+        if (this.state.options)
+        {
+            return <Options players={this.props}/>
+        }
+        else if (this.state.game){
+            return <GameFunctions difficulty={this.props.selectedDifficulty} n={this.props.size} players={this.props.players}/>
+        }
+        else
         {
             return (
                 <div>
                     <div style={myStyle}>
                         <div style={title}>
-                            <OpponentTitle />
+                            {/* <WinTitle winner={this.props.winner}/> */}
+                            winner={this.state.winner}
                         </div>
-                        <input onClick={this.showOptionsPVP} style={playerButtonStyle} type="image" src={friend} name="playerpbutton"/>
-                        <input onClick={this.showOptionsCPU} style={cpuButtonStyle} type="image" src={computer} name="cpupbutton"/>
+
+                        {/* Need to add images here for playAgain button and options button */}
+                        <input onClick={this.newGame} style={playAgainButtonStyle} type="image" src={playAgain}  name="playerpbutton"/>
+                        <input onClick={this.showOptions} style={optionsButtonStyle} type="image" src={options} name="cpupbutton"/>
                     </div>
                     <input onClick={this.goBack} style={backButtonStyle} src={back} type="image"  name="backbutton"/>
-                    <input style={helpButtonStyle} onClick={this.showHelp}  type="image" src={help} name="helpbutton"/>
+                    <div><input style={helpButtonStyle} onClick={this.showHelp}  type="image" src={help} name="helpbutton"/></div>
                 </div>
             );
-        }
-        else if (this.state.options)
-        {
-            return <Options players={this.state.player}/>
-        }
-        else if (this.state.game){
-            return <GameFunctions />
         }
     };
 }
 
-export default Opponent;
+
+export default EndGame;

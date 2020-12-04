@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import Help from './Help';
+import help from '../images/help.png';
 import Options from '../containers/Options.js';
 import droplet from '../images/droplet.png';
-import back from '../images/back_arrow.png';
+import audioOnButton from '../images/audio_on.png';
+import difficultyButton from '../images/difficulty.png'
+import newGameButton from '../images/new.png'
+import EndGame from '../containers/EndGame.js';
 
 let x = 0;
     /**
@@ -114,6 +119,15 @@ function logic(state) {
         return [nums, targetSum];
     }
 
+function makeArrayOf(value, length) {
+    var arr = [], i = length;
+    while (i--) {
+        arr[i] = value;
+    }
+    return arr;
+}
+
+//////////////////////////////////////////END OF FUNCTIONS/////////////////////////////////////////////////////////
 
 class GameFunctions extends React.Component {
     constructor(props) {
@@ -121,26 +135,26 @@ class GameFunctions extends React.Component {
         this.state = {
             tasks: [
             ],
-            target: 0,
-            players: props.players,
-            n: Math.sqrt(props.n),
-            difficulty: props.difficulty,
-            player1Sum: 0,
-            player2Sum: 0,
-            player1Moves: 0,
-            player2Moves: 0
+            target: 0,                      // Target sum
+            players: props.players,         // Number of players
+            n: Math.sqrt(props.n),          // sqrt(9) or sqrt(16) = 3 or 4
+            difficulty: props.difficulty,   // Difficulty level
+            player1Sum: 0,                  // Player 1's current sum
+            player2Sum: 0,                  // Player 2's current sum
+            player1Moves: 0,                // Number of moves made by Player 1
+            player2Moves: 0,                // Number of moves made by Player 2
+            p1: 1,                          // Used for determining turn
+            p2: 0,                          // Used for determining turn
+            endGame: false,                 // Used to determine if E.O.G
+            helpscreen: false,
+            available: makeArrayOf(0, props.n),
+            returnScreen: 'game',
+            winner: ''
         };
-        this.goBack = this.goBack.bind(this);
-        console.log("Difficulty", this.state.difficulty);
-        console.log("Number of players", this.state.players);
-        console.log("Number", this.state.n);
-        const COLORS = [
-            'red',
-            'green',
-            'blue',
-            'yellow',
-            'cyan',
-          ];
+        this.showHelp = this.showHelp.bind(this);
+        this.showOptions = this.showOptions.bind(this);
+        this.endGame = this.endGame.bind(this);
+
         var values = logic(this.state);
         var nums = values[0];
         var targetSum = values[1];
@@ -149,13 +163,17 @@ class GameFunctions extends React.Component {
         for (i = 0; i < nums.length; i++) {
             this.state.tasks.push({id: i,
                  name: nums[i], 
-                 category: "board", 
-                 bgcolor: COLORS[Math.floor(Math.random() * COLORS.length)]})
+                 category: "board"})
         }
     };
 
+    endGame(){
+        this.setState({
+            endGame: true
+        })
+    }
+
     onDragStart = (ev, id) => {
-        console.log('dragstart:',id);
         ev.dataTransfer.setData("id", id);
     }
 
@@ -163,85 +181,165 @@ class GameFunctions extends React.Component {
         ev.preventDefault();
     }
 
+    //Classic onDrop
     onDrop = (ev, cat) => {
-       let id = ev.dataTransfer.getData("id");
-       
-       let tasks = this.state.tasks.filter((task) => {
-           if (task.id == id) {
-               task.category = cat;
-           }
-           return task;
-       });
+        console.log("Dropping", ev, cat);
+        let id = ev.dataTransfer.getData("id");
+        
+        let tasks = this.state.tasks.filter((task) => {
+            if (task.id == id) {
+                task.category = cat;
+            }
+            return task;
+        });
+ 
+        this.setState({
+            ...this.state,
+            tasks
+        });
+     }
 
-       this.setState({
-           ...this.state,
-           tasks
-       });
-    }
-
-    onDropP1 = (ev, cat) => {
-        //Check if possible to make another selection
+    //OnDrop for Player vs CPU
+    onDrop2 = (ev, cat, cat2) => {
+        //Dont need to check whose move because this will go for the CPU
         if (this.state.player1Moves >= this.state.n) {
             alert("Already made maximum moves", this.state.n);
             return;
         }
+
         let id = ev.dataTransfer.getData("id");
         var s;
+        var s2;
         let tasks = this.state.tasks.filter((task) => {
             if (task.id == id) {
                 task.category = cat;
                 s = task.name;
-                this.state.player1Moves++;  //Made selection so count it
+                this.state.available[id] = 1;   //Set it to 1 = taken
+                this.state.player1Moves++;
+                this.state.p1 = 0;
+            }
+            if (this.state.p1 === 0) {
+                if (this.state.available[task.id] === 0) {
+                    //CPU Move
+                    this.state.p1 = 1;
+                    this.state.player2Moves++;
+                    this.state.available[task.id] = 1;
+                    task.category = cat2;
+                    s2 = task.name;
+                }
             }
             return task;
         });
-        this.state.player1Sum = this.state.player1Sum + s;  //Add the selecred number to the sum for the player
+        this.state.player1Sum = this.state.player1Sum + s;
+        this.state.player2Sum = this.state.player2Sum + s2;
         this.setState({
             ...this.state,
             tasks
         });
 
         if (this.state.player1Sum == this.state.target) {   //If the player's sum matches target
-            alert("Player 1 Wins"); //Change to render new screen
+            this.state.endGame = true;
+            this.state.winner = "Player 1"
         }
-     }
 
-     onDropP2 = (ev, cat) => {
-        if (this.state.player2Moves >= this.state.n) {
-            alert("Already made maximum moves", this.state.n);
+        if (this.state.player2Sum == this.state.target) {   //If the player's sum matches target
+        this.state.endGame = true;
+        this.state.winner = "CPU"
+        }
+    }
+
+    //OnDrop specifically for Player 1 in PvP
+    onDropP1 = (ev, cat) => {
+        //Check if current player
+        if (this.state.p1 === 1) {
+            this.state.p1 = 0;  //Switch turns
+            this.state.p2 = 1;
+            //Check if possible to make another selection
+            if (this.state.player1Moves >= this.state.n) {
+                alert("Already made maximum moves", this.state.n);  //TODO: REPLACE
+                return;
+            }
+            let id = ev.dataTransfer.getData("id");
+            var s;
+            let tasks = this.state.tasks.filter((task) => {
+                if (task.id == id) {
+                    task.category = cat;
+                    s = task.name;
+                    this.state.player1Moves++;  //Made selection so count it
+                }
+                return task;
+            });
+            this.state.player1Sum = this.state.player1Sum + s;  //Add the selecred number to the sum for the player
+            this.setState({
+                ...this.state,
+                tasks
+            });
+
+            if (this.state.player1Sum == this.state.target) {   //If the player's sum matches target
+                this.state.endGame = true;
+                this.state.winner = "Player 1"
+                console.log(this.state.winner);
+                return <EndGame winner={this.state.winner}/>
+            }
+        } else {
             return;
         }
-        let id = ev.dataTransfer.getData("id");
-        var s;
-        let tasks = this.state.tasks.filter((task) => {
-            if (task.id == id) {
-                task.category = cat;
-                s = task.name;
-                this.state.player2Moves++;
-            }
-            return task;
-        });
-        this.state.player2Sum = this.state.player2Sum + s;
-        this.setState({
-            ...this.state,
-            tasks
-        });
-
-        if (this.state.player2Sum == this.state.target) {
-            alert("Player 2 Wins");
-        }
+        
      }
 
+    //OnDrop specifically for Player 2 in PvP
+    onDropP2 = (ev, cat) => {
+        if (this.state.p2 === 1) {
+            this.state.p1 = 1;
+            this.state.p2 = 0;
+            if (this.state.player2Moves >= this.state.n) {
+                alert("Already made maximum moves", this.state.n);
+                return;
+            }
+            let id = ev.dataTransfer.getData("id");
+            var s;
+            let tasks = this.state.tasks.filter((task) => {
+                if (task.id == id) {
+                    task.category = cat;
+                    s = task.name;
+                    this.state.player2Moves++;
+                }
+                return task;
+            });
+            this.state.player2Sum = this.state.player2Sum + s;
+            this.setState({
+                ...this.state,
+                tasks
+            });
 
-    goBack(){
+            if (this.state.player2Sum == this.state.target) {
+                this.state.endGame = true;
+                this.state.winner = "Player 2"
+                console.log(this.state.winner);
+                return <EndGame winner={this.state.winner} />
+            }
+        } else {
+            return;
+        }
+    }
+
+    showHelp(){
+        console.log('Changing to helpscreen');
         this.setState({
-            goBack: true,
+            gamescreen: false,
+            helpScreen: true,
+            });
+    }
+
+    showOptions(){
+        this.setState({
+            showOptions: true,
             display: false
         })
     }
 
-
     render() {
+        const players = this.state.players;
         const n = this.state.n;
         var tasks = {
             board: [],
@@ -256,9 +354,9 @@ class GameFunctions extends React.Component {
                     draggable
                     className="draggable"
                     style = {{backgroundImage: `url(${droplet})`,
-                        border: '1px solid black',
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'center',
+                        backgroundColor: "#2196F3",
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
@@ -323,64 +421,106 @@ class GameFunctions extends React.Component {
             gridColumnEnd: '3',
             padding: '0px',
             margin: '0px',
-        };
+        }
 
         const subTitle = {
             fontSize: '30px',
             textAlign: 'center',
+            gridRowStart: '1',
+            gridRowEnd: '1',
             padding: '0px 0px 20px 0px'
-        };
+        }
 
         const player1Style={
+            display: 'inline-grid',
+            gridTemplateColumns: '1',
+            gridTemplateRows: '1',
             gridColumnStart: '1',
             gridColumnEnd: '2',
             gridRowStart: '1',
             gridRowEnd: '3',
-            backgroundColor: "white",
+            backgroundColor: "#1b2b8c",
             borderRight: '5px solid black'
         }
 
+        const fillLineStyle={
+            gridRowStart: '1',
+            gridRowEnd: '2',
+            borderBottom: '2px solid black'
+        }
+
         const player2Style={
+            display: 'inline-grid',
+            gridTemplateColumns: '1',
+            gridTemplateRows: '1',
             gridColumnStart: '3',
             gridColumnEnd: '4',
             gridRowStart: '1',
             gridRowEnd: '3',
-            backgroundColor: "white",
+            backgroundColor: "#1b2b8c",
             borderLeft: '5px solid black'
         }
 
-        const backButtonStyle = {
+        const helpButtonStyle = {
+            display: 'block',
+            //float: 'left',
+            position: 'absolute',
+            width: '5%',
+            height: 'auto', 
+            bottom: '2.6%',
+            right: '1.3%'
+        }
+
+        const difficultyButtonStyle = {
             display: 'block',
             //float: 'left',
             position: 'absolute',
             width: '4%',
-            height: 'auto',
-            bottom: '2%',
-            left: '1%'
+            height: 'auto', 
+            bottom: '2.6%',
+            left: '1.3%'
         }
 
-        if (this.state.goBack)
-        {
-            if (this.props.inGame)
-            {
+        const newGameButtonStyle = {
+            display: 'block',
+            //float: 'left',
+            position: 'absolute',
+            width: '5%',
+            height: '9%', 
+            top: '2%',
+            left: '1.3%'
+        }
+
+        const audioButtonStyle = {
+            display: 'block',
+            //float: 'left',
+            position: 'absolute',
+            width: '5%',
+            height: 'auto',
+            top: '2%',
+            right: '1.3%'
+        }
+
+        if (this.state.showOptions) {
+            if (this.props.inGame) {
                 return <GameFunctions />
-            }
-            else
-            {
-                return <Options />
+            } else {
+                return <Options players={this.state.players}/>
             };
         };
+
+        if (this.state.helpScreen){
+            return <Help returnScreen={'game'} n={this.state.n} difficulty={this.state.difficulty} players={this.state.players}/>
+        }
+
+        if (this.state.endGame) {
+            console.log(this.state.endGame);
+            return <EndGame winner={this.state.winner}/>
+        }
         
         return (
             <div>
                 <div style={myStyle}>
-                    <div className="player1" style={player1Style}
-                        onDragOver={(e)=>this.onDragOver(e)}
-                        onDrop={(e)=>this.onDropP1(e, "p1")}>
-                        <div className="task-header" style={subTitle}>Player 1</div>
-                        {tasks.p1}
-                        {this.state.player1Sum}
-                    </div>
                     <h2 className="header" style={title}>Target Sum {this.state.target}</h2>
 
                     {n === 3 ? (<div className="board" style={board3}
@@ -393,16 +533,34 @@ class GameFunctions extends React.Component {
                         onDrop={(e)=>{this.onDrop(e, "board")}}>
                         {tasks.board}
                     </div>)}
-                    
-                    <div className="player2" style={player2Style}
+
+                    {players === 1 && <> <div className="player1" style={player1Style}
+                        onDragOver={(e)=>this.onDragOver(e)}
+                        onDrop={(e)=>this.onDrop2(e, "p1", "p2")}>
+                        <div className="task-header" style={subTitle}>Player</div>
+                        {tasks.p1}
+                    </div><div className="CPU" style={player2Style}>
+                        <div className="task-header" style={subTitle}>CPU</div>
+                        {tasks.p2}
+                    </div></>}
+
+                    {players === 2 && <> <div className="player1" style={player1Style}
+                        onDragOver={(e)=>this.onDragOver(e)}
+                        onDrop={(e)=>this.onDropP1(e, "p1")}>
+                        <div className="task-header" style={subTitle}>Player 1</div>
+                        {tasks.p1}
+                    </div><div className="player2" style={player2Style}
                         onDragOver={(e)=>this.onDragOver(e)}
                         onDrop={(e)=>this.onDropP2(e, "p2")}>
                         <div className="task-header" style={subTitle}>Player 2</div>
                         {tasks.p2}
-                        {this.state.player2Sum}
-                    </div>
+                    </div></>}
                 </div>
-                <input onClick={this.goBack} style={backButtonStyle} src={back} type="image"  name="backbutton"/>
+                {/* <input onClick={this.goBack} style={backButtonStyle} src={back} type="image"  name="backbutton"/> */}
+                <input style={audioButtonStyle} type="image" src={audioOnButton} name="audioButton"/>
+                <input style={helpButtonStyle} onClick={this.showHelp}  type="image" src={help} name="helpbutton"/>
+                <input onClick={this.showOptions} style={difficultyButtonStyle} type="image" src={difficultyButton} name="difficultyButton"/>
+                <input style={newGameButtonStyle} type="image" src={newGameButton} name="newGameButton"/>
             </div>
         )
     }
