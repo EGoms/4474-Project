@@ -7,6 +7,14 @@ import options from '../images/computer.png' //Change this to options img
 import title from '../components/OpponentTitle'; //Change this to endGame Title
 import help from '../images/help.png';
 import back from '../images/back_arrow.png';
+import audioOnButton from '../images/audio_on.png';
+import audioOffButton from '../images/audio_off.png';
+import audioOnHighlighted from '../images/audio-on-highlighted.png';
+import audioOffHighlighted from '../images/audio-off-highlighted.png';
+import difficultyButton from '../images/difficulty.png'
+import difficultyHighlighted from '../images/difficulty-highlighted.png'
+import newGameButton from '../images/new.png'
+
 
 class EndGame extends React.Component {
 // Pass this component the old game set up information. IE:
@@ -22,17 +30,37 @@ class EndGame extends React.Component {
           options: false,
           game: false,
           returnScreen: 'endGame',
+          helpscreen: false,
           winner: props.winner,
-          display: true
+          display: true,
+          player: 0,
+          muted: 0
         };
         this.showHelp = this.showHelp.bind(this);
+        this.muteAudio = this.muteAudio.bind(this);
         this.showOptionsCPU = this.showOptionsCPU.bind(this);
         this.showOptionsPVP = this.showOptionsPVP.bind(this);
         this.goBack = this.goBack.bind(this);
+        this.showOptions = this.showOptions.bind(this);
     };
 
+    showOptionsPVP() {
+        console.log('Changing to Options PvP');
+        this.setState({
+            options: true,
+            player: 2
+        })
+    }
 
-    showoptions(){
+    showOptionsCPU() {
+        console.log('Changing to Options PvP');
+        this.setState({
+            options: true,
+            player: 1
+        })
+    }
+
+    showOptions(){
         console.log('Changing to Options CPU');
         this.setState({
             options: true,
@@ -40,9 +68,46 @@ class EndGame extends React.Component {
             player: 1
         });
     }
+      
+    showHelp(){
+        console.log('Changing to helpscreen');
+        this.setState({
+            EndGame: false,
+            helpScreen: true,
+            });
+    }
 
+    muteAudio(e) {
+        if (e.target.src === audioOffButton || e.target.src === audioOffHighlighted) {
+            e.target.src = audioOnButton
+            this.state.muted = 0;
+        } else {
+            e.target.src = audioOffButton;
+            this.state.muted = 1;
+        }
+    }
 
+    highlightDifficulty(e) {
+        e.target.src = difficultyHighlighted;
+    }
 
+    unhighlightDifficulty(e) {
+        e.target.src = difficultyButton;
+    }
+
+    highlightAudio(e) {
+        if (e.target.src === audioOnButton)
+            e.target.src = audioOnHighlighted;
+        if (e.target.src === audioOffButton)
+            e.target.src = audioOffHighlighted;
+    }
+
+    unhighlightAudio(e) {
+        if (e.target.src === audioOnHighlighted)
+            e.target.src = audioOnButton;
+        if (e.target.src === audioOffHighlighted)
+            e.target.src = audioOffButton;
+    }
 
     goBack(){
         this.setState({
@@ -54,17 +119,16 @@ class EndGame extends React.Component {
     render() {
         const myStyle = {
             display: 'inline-grid',
+            backgroundColor: '#2196F3',
             marginLeft: '10%',
             marginTop: '5%',
-            gridTemplateColumns: 'auto',
-            gridTemplateRows: '50% auto',
             //transform: 'translateX(-50%)',
-            borderRadius: '10px',
-            position: 'absolute',
-            border: '5px solid black',
             height: '80vh',
             width: '80vw',
-            backgroundColor: '#27BBCA'
+            position: 'absolute',
+            justifyContent: 'stretch',
+            border: '5px solid black',
+            borderRadius: '10px'
         };
 
         const cpuButtonStyle = {
@@ -81,6 +145,15 @@ class EndGame extends React.Component {
             marginRight: 'auto'
 
         };
+
+        const title = {
+            fontSize: '40px' ,
+            textAlign: 'center',
+            gridColumnStart: '1',
+            gridColumnEnd: '2',
+            padding: '0px',
+            margin: '0px',
+        }
         
         const backButtonStyle = {
             display: 'block',
@@ -108,7 +181,7 @@ class EndGame extends React.Component {
             width: '4%',
             height: 'auto',
             bottom: '2%',
-            left: '1%'
+            right: '1%'
         } 
 
         const helpButtonStyle = {
@@ -121,21 +194,42 @@ class EndGame extends React.Component {
             right: '1.3%'
         }
 
-        const title = {
+        const difficultyButtonStyle = {
             display: 'block',
-            width: '60%',
-            marginLeft: 'auto',
-            marginRight: 'auto'
-        };
+            //float: 'left',
+            position: 'absolute',
+            width: '4%',
+            height: 'auto', 
+            bottom: '2.6%',
+            left: '1.3%'
+        }
 
-        
+        const newGameButtonStyle = {
+            display: 'block',
+            //float: 'left',
+            position: 'absolute',
+            width: '5%',
+            height: '9%', 
+            top: '2%',
+            left: '1.3%'
+        }
+
+        const audioButtonStyle = {
+            display: 'block',
+            //float: 'left',
+            position: 'absolute',
+            width: '4%',
+            height: 'auto',
+            top: '2%',
+            right: '1.3%'
+        }
 
         if (this.state.helpScreen){
             return <Help returnScreen={'endGame'}/>
         }
         if (this.state.options)
         {
-            return <Options players={this.props}/>
+            return <Options players={this.state.player}/>
         }
         else if (this.state.game){
             return <GameFunctions difficulty={this.props.selectedDifficulty} n={this.props.size} players={this.props.players}/>
@@ -146,16 +240,19 @@ class EndGame extends React.Component {
                 <div>
                     <div style={myStyle}>
                         <div style={title}>
-                            {/* <WinTitle winner={this.props.winner}/> */}
-                            winner={this.state.winner}
+                            Winner is {this.state.winner}!
                         </div>
 
                         {/* Need to add images here for playAgain button and options button */}
-                        <input onClick={this.newGame} style={playAgainButtonStyle} type="image" src={playAgain}  name="playerpbutton"/>
-                        <input onClick={this.showOptions} style={optionsButtonStyle} type="image" src={options} name="cpupbutton"/>
+                        <input onClick={this.showOptionsPVP} style={playAgainButtonStyle} type="image" src={playAgain}  name="playerpbutton"/>
+                        <input onClick={this.showOptionsCPU} style={optionsButtonStyle} type="image" src={options} name="cpupbutton"/>
                     </div>
-                    <input onClick={this.goBack} style={backButtonStyle} src={back} type="image"  name="backbutton"/>
-                    <div><input style={helpButtonStyle} onClick={this.showHelp}  type="image" src={help} name="helpbutton"/></div>
+                    <input onClick={(e) => this.muteAudio(e)} onMouseEnter={(e) => this.highlightAudio(e)} onMouseLeave={(e) => this.unhighlightAudio(e)}
+                        style={audioButtonStyle} type="image" src={audioOnButton} name="audioButton"/>
+                    <input style={helpButtonStyle} onClick={this.showHelp}  type="image" src={help} name="helpbutton"/>
+                    <input onClick={this.showOptions} onMouseEnter={(e) => this.highlightDifficulty(e)} onMouseLeave={(e) => this.unhighlightDifficulty(e)}
+                        style={difficultyButtonStyle} type="image" src={difficultyButton} name="difficultyButton"/>
+                    {/* <input onClick={() => this.newGame()} style={newGameButtonStyle} type="image" src={newGameButton} name="newGameButton"/> */}
                 </div>
             );
         }

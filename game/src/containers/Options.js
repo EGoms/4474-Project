@@ -120,7 +120,7 @@ class Options extends React.Component {
             display: 'inline-grid',
             gridTemplateColumns: 'auto auto',
             gridTemplateRows: '20% auto',
-            backgroundColor: '#27BBCA',
+            backgroundColor: '#2196F3',
             marginLeft: '10%',
             marginTop: '5%',
             //marginBottom: '5%',
@@ -227,7 +227,7 @@ class Options extends React.Component {
                         
                         <div class="column" style={columnStyle}>
                             <div style={subTitle}>Board Size</div>
-                            <div onClick={this.playGame} style={continueCellStyle}><ContinueButtonComponent/></div>
+                            {/* <div onClick={this.playGame} style={continueCellStyle}><ContinueButtonComponent/></div> */}
                             <div onClick={this.numberNine} style={cellStyle}> <Number9Render size={this.state.size}/></div>
                             <div onClick={this.numberSixteen} style={cellStyle}> <Number16Render size={this.state.size}/></div>
                             <div onClick={this.playGame} style={continueCellStyle}><ContinueButtonComponent/></div>

@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import Speech from 'react-speech';
 import Help from './Help';
 import help from '../images/help.png';
+import hint from '../images/hint.png';
 import Options from '../containers/Options.js';
 import droplet from '../images/droplet.png';
 import audioOnButton from '../images/audio_on.png';
+import audioOffButton from '../images/audio_off.png';
+import audioOnHighlighted from '../images/audio-on-highlighted.png';
+import audioOffHighlighted from '../images/audio-off-highlighted.png';
 import difficultyButton from '../images/difficulty.png'
+import difficultyHighlighted from '../images/difficulty-highlighted.png'
 import newGameButton from '../images/new.png'
 import EndGame from '../containers/EndGame.js';
 
@@ -127,6 +133,14 @@ function makeArrayOf(value, length) {
     return arr;
 }
 
+function bits(n){
+    var res = [];
+    while(n){
+      res.push(n & 1);
+      n >>= 1;
+    }
+    return res;
+  }
 //////////////////////////////////////////END OF FUNCTIONS/////////////////////////////////////////////////////////
 
 class GameFunctions extends React.Component {
@@ -147,13 +161,20 @@ class GameFunctions extends React.Component {
             p2: 0,                          // Used for determining turn
             endGame: false,                 // Used to determine if E.O.G
             helpscreen: false,
+            newGame: false,
             available: makeArrayOf(0, props.n),
             returnScreen: 'game',
-            winner: ''
+            winner: '',
+            buttons: 0,
+            muted: 0
         };
         this.showHelp = this.showHelp.bind(this);
         this.showOptions = this.showOptions.bind(this);
         this.endGame = this.endGame.bind(this);
+        this.showHintP1 = this.showHintP1.bind(this);
+        this.showHintP2 = this.showHintP2.bind(this);
+        this.muteAudio = this.muteAudio.bind(this);
+        this.newGame = this.newGame.bind(this);
 
         var values = logic(this.state);
         var nums = values[0];
@@ -183,7 +204,6 @@ class GameFunctions extends React.Component {
 
     //Classic onDrop
     onDrop = (ev, cat) => {
-        console.log("Dropping", ev, cat);
         let id = ev.dataTransfer.getData("id");
         
         let tasks = this.state.tasks.filter((task) => {
@@ -203,7 +223,6 @@ class GameFunctions extends React.Component {
     onDrop2 = (ev, cat, cat2) => {
         //Dont need to check whose move because this will go for the CPU
         if (this.state.player1Moves >= this.state.n) {
-            alert("Already made maximum moves", this.state.n);
             return;
         }
 
@@ -256,7 +275,6 @@ class GameFunctions extends React.Component {
             this.state.p2 = 1;
             //Check if possible to make another selection
             if (this.state.player1Moves >= this.state.n) {
-                alert("Already made maximum moves", this.state.n);  //TODO: REPLACE
                 return;
             }
             let id = ev.dataTransfer.getData("id");
@@ -269,17 +287,22 @@ class GameFunctions extends React.Component {
                 }
                 return task;
             });
-            this.state.player1Sum = this.state.player1Sum + s;  //Add the selecred number to the sum for the player
+            this.state.player1Sum = this.state.player1Sum + s;  //Add the selected number to the sum for the player
+            var div1 = document.getElementsByClassName("player1")
+            div1[0].style.backgroundColor = '#1b2b8c';
+
+            var div2 = document.getElementsByClassName("player2")
+            div2[0].style.backgroundColor = '#3CED1C';
             this.setState({
                 ...this.state,
                 tasks
             });
 
             if (this.state.player1Sum == this.state.target) {   //If the player's sum matches target
-                this.state.endGame = true;
-                this.state.winner = "Player 1"
-                console.log(this.state.winner);
-                return <EndGame winner={this.state.winner}/>
+                this.setState({
+                    winner: "Player 1",
+                    endGame: true
+                })
             }
         } else {
             return;
@@ -293,7 +316,6 @@ class GameFunctions extends React.Component {
             this.state.p1 = 1;
             this.state.p2 = 0;
             if (this.state.player2Moves >= this.state.n) {
-                alert("Already made maximum moves", this.state.n);
                 return;
             }
             let id = ev.dataTransfer.getData("id");
@@ -307,20 +329,70 @@ class GameFunctions extends React.Component {
                 return task;
             });
             this.state.player2Sum = this.state.player2Sum + s;
+            var div1 = document.getElementsByClassName("player1")
+            div1[0].style.backgroundColor = '#FBFF11';
+
+            var div2 = document.getElementsByClassName("player2")
+            div2[0].style.backgroundColor = '#1b2b8c';
             this.setState({
                 ...this.state,
                 tasks
             });
 
             if (this.state.player2Sum == this.state.target) {
-                this.state.endGame = true;
-                this.state.winner = "Player 2"
-                console.log(this.state.winner);
-                return <EndGame winner={this.state.winner} />
+                this.setState({
+                    winner: "Player 2",
+                    endGame: true
+                })
             }
         } else {
             return;
         }
+    }
+
+    onClick = (e) => {
+        if (e.button === 0) {
+            return;
+        } else if (e.button === 2) {
+            var number = e.target.innerHTML;
+            var msg = new SpeechSynthesisUtterance();
+            msg.text = number;
+            if (!this.state.muted)
+                window.speechSynthesis.speak(msg);
+        }
+    }
+
+    highlightDifficulty(e) {
+        e.target.src = difficultyHighlighted;
+    }
+
+    unhighlightDifficulty(e) {
+        e.target.src = difficultyButton;
+    }
+
+    highlightAudio(e) {
+        if (e.target.src === audioOnButton)
+            e.target.src = audioOnHighlighted;
+        if (e.target.src === audioOffButton)
+            e.target.src = audioOffHighlighted;
+    }
+
+    unhighlightAudio(e) {
+        if (e.target.src === audioOnHighlighted)
+            e.target.src = audioOnButton;
+        if (e.target.src === audioOffHighlighted)
+            e.target.src = audioOffButton;
+    }
+
+    muteAudio(e) {
+        if (e.target.src === audioOffButton || e.target.src === audioOffHighlighted) {
+            e.target.src = audioOnButton
+            this.state.muted = 0;
+        } else {
+            e.target.src = audioOffButton;
+            this.state.muted = 1;
+        }
+
     }
 
     showHelp(){
@@ -331,6 +403,14 @@ class GameFunctions extends React.Component {
             });
     }
 
+    showHintP1(e, sum) {
+        e.target.outerHTML = "<div>Sum on Turn " + this.state.player1Moves + ": " + sum + "</div>";
+    }
+
+    showHintP2(e, sum) {
+        e.target.outerHTML = "<div>Sum on Turn " + this.state.player2Moves + ": " + sum + "</div>";
+    }
+
     showOptions(){
         this.setState({
             showOptions: true,
@@ -338,7 +418,15 @@ class GameFunctions extends React.Component {
         })
     }
 
+    newGame() {
+        this.setState({
+            newGame: true
+        })
+    }
+
     render() {
+        const preventDefault = (e) => { e.preventDefault() }
+
         const players = this.state.players;
         const n = this.state.n;
         var tasks = {
@@ -351,6 +439,8 @@ class GameFunctions extends React.Component {
             tasks[t.category].push(
                 <div key={t.id} 
                     onDragStart = {(e) => this.onDragStart(e, t.id)}
+                    onContextMenu={preventDefault}
+                    onMouseDown = {(e) => this.onClick(e)}
                     draggable
                     className="draggable"
                     style = {{backgroundImage: `url(${droplet})`,
@@ -439,7 +529,7 @@ class GameFunctions extends React.Component {
             gridColumnEnd: '2',
             gridRowStart: '1',
             gridRowEnd: '3',
-            backgroundColor: "#1b2b8c",
+            backgroundColor: "#FBFF11",
             borderRight: '5px solid black'
         }
 
@@ -471,6 +561,26 @@ class GameFunctions extends React.Component {
             right: '1.3%'
         }
 
+        const hintButtonStyle = {
+            display: 'block',
+            //float: 'left',
+            position: 'absolute',
+            width: '3%',
+            height: 'auto', 
+            top: '1%',
+            left: '1%'
+        }
+        
+        const hint2ButtonStyle = {
+            display: 'block',
+            //float: 'left',
+            position: 'absolute',
+            width: '3%',
+            height: 'auto', 
+            top: '1%',
+            right: '1%'
+        }
+
         const difficultyButtonStyle = {
             display: 'block',
             //float: 'left',
@@ -495,7 +605,7 @@ class GameFunctions extends React.Component {
             display: 'block',
             //float: 'left',
             position: 'absolute',
-            width: '5%',
+            width: '4%',
             height: 'auto',
             top: '2%',
             right: '1.3%'
@@ -514,8 +624,11 @@ class GameFunctions extends React.Component {
         }
 
         if (this.state.endGame) {
-            console.log(this.state.endGame);
             return <EndGame winner={this.state.winner}/>
+        }
+
+        if (this.state.newGame) {
+            return <GameFunctions difficulty={this.state.difficulty} n={this.state.n**2} players={this.state.players} />
         }
         
         return (
@@ -537,7 +650,9 @@ class GameFunctions extends React.Component {
                     {players === 1 && <> <div className="player1" style={player1Style}
                         onDragOver={(e)=>this.onDragOver(e)}
                         onDrop={(e)=>this.onDrop2(e, "p1", "p2")}>
-                        <div className="task-header" style={subTitle}>Player</div>
+                        <div className="task-header" style={subTitle}>
+                            <input style={hintButtonStyle} onClick={(e) => this.showHintP1(e, this.state.player1Sum)}  type="image" src={hint} name="hintbutton"/>
+                            Player</div>
                         {tasks.p1}
                     </div><div className="CPU" style={player2Style}>
                         <div className="task-header" style={subTitle}>CPU</div>
@@ -547,20 +662,27 @@ class GameFunctions extends React.Component {
                     {players === 2 && <> <div className="player1" style={player1Style}
                         onDragOver={(e)=>this.onDragOver(e)}
                         onDrop={(e)=>this.onDropP1(e, "p1")}>
-                        <div className="task-header" style={subTitle}>Player 1</div>
+                        <div className="task-header" style={subTitle}>
+                            <input style={hintButtonStyle} onClick={(e) => this.showHintP1(e, this.state.player1Sum)}  type="image" src={hint} name="hintbutton"/>
+                            Player 1
+                        </div>
                         {tasks.p1}
                     </div><div className="player2" style={player2Style}
                         onDragOver={(e)=>this.onDragOver(e)}
                         onDrop={(e)=>this.onDropP2(e, "p2")}>
-                        <div className="task-header" style={subTitle}>Player 2</div>
+                        <div className="task-header" style={subTitle}>
+                            <input style={hint2ButtonStyle} onClick={(e) => this.showHintP2(e, this.state.player2Sum)}  type="image" src={hint} name="hintbutton"/>
+                            Player 2</div>
                         {tasks.p2}
                     </div></>}
                 </div>
                 {/* <input onClick={this.goBack} style={backButtonStyle} src={back} type="image"  name="backbutton"/> */}
-                <input style={audioButtonStyle} type="image" src={audioOnButton} name="audioButton"/>
+                {<input onClick={(e) => this.muteAudio(e)} onMouseEnter={(e) => this.highlightAudio(e)} onMouseLeave={(e) => this.unhighlightAudio(e)} 
+                    style={audioButtonStyle} type="image" src={audioOnButton} name="audioButton"/>}
                 <input style={helpButtonStyle} onClick={this.showHelp}  type="image" src={help} name="helpbutton"/>
-                <input onClick={this.showOptions} style={difficultyButtonStyle} type="image" src={difficultyButton} name="difficultyButton"/>
-                <input style={newGameButtonStyle} type="image" src={newGameButton} name="newGameButton"/>
+                <input onClick={this.showOptions} onMouseEnter={(e) => this.highlightDifficulty(e)} onMouseLeave={(e) => this.unhighlightDifficulty(e)}
+                    style={difficultyButtonStyle} type="image" src={difficultyButton} name="difficultyButton"/>
+                <input onClick={() => this.newGame()} style={newGameButtonStyle} type="image" src={newGameButton} name="newGameButton"/>
             </div>
         )
     }

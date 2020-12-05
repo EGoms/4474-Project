@@ -74,7 +74,7 @@ class Opponent extends React.Component {
             border: '5px solid black',
             height: '80vh',
             width: '80vw',
-            backgroundColor: '#27BBCA'
+            backgroundColor: '#2196F3'
         };
 
         const cpuButtonStyle = {
