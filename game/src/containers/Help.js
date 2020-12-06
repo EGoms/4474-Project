@@ -1,7 +1,8 @@
 import React from 'react';
 import HelpVid from './HelpVid';
 import helpTitle from '../images/helpTitle.png'
-import back from '../images/back_arrow.png'
+import backButton from '../images/back_arrow.png'
+import backHighlighted from '../images/back-arrow-highlighted.png';
 import GameContainer from './GameContainer'
 import GameFunctions from './GameFunctions'
 import Opponent from './Opponent'
@@ -17,8 +18,11 @@ class Help extends React.Component {
             display: true,
             returnScreen: this.props.returnScreen,
             size: props.n**2,
+            winner: props.winner,
             selectedDifficulty: props.difficulty,
-            players: props.players
+            players: props.players,
+            player1Score: props.player1Score,
+            player2Score: props.player2Score
         };
         this.goBack = this.goBack.bind(this);
     };
@@ -28,6 +32,14 @@ class Help extends React.Component {
             goBack: true,
             display: false
         })
+    }
+
+    highlightBack(e) {
+        e.target.src = backHighlighted;
+    }
+
+    unhighlightBack(e) {
+        e.target.src = backButton;
     }
 
     render(){ 
@@ -119,10 +131,10 @@ class Help extends React.Component {
                         <div style={leftColumn}> 
                             <div style={helpText}>
                                 <p><br/><br/>At the beginning of this game, the players will be presented with a target sum at the top of the screen. This is the sum you want to reach by 
-                                    selecting 3 numbers from the board. You must reach this sum with exactly 3 numbers, no more and no fewer. Players take turns selecting numbers 
+                                    selecting 3 (or 4) numbers from the board. You must reach this sum with exactly 3 (or 4) numbers, no more and no fewer. Players take turns selecting numbers 
                                     from the center of the screen by dragging and dropping the desired number to your side of the board. Once you drop the number you selected on your 
                                     side of the board, you will notice your glass will fill with water, and the number you selected will be added to your glass. The first player to 
-                                    reach the target sum with their 3 chosen numbers wins! If neither player reaches the target sum after selecting 3 numbers each, then the game is 
+                                    reach the target sum with their 3 (or 4) chosen numbers wins! If neither player reaches the target sum after selecting 3 (or 4) numbers each, then the game is 
                                     in a stalemate and a draw is declared.</p></div>
                         </div> 
                         <div style={rightColumn}>
@@ -131,14 +143,15 @@ class Help extends React.Component {
                                 </div>
                             </div>            
                     </div> 
-                    <input style={backButtonStyle} onClick={this.goBack} src={back} type="image"  name="helpbutton"/>
+                    <input onClick={this.goBack} onMouseEnter={(e) => this.highlightBack(e)} onMouseLeave={(e) => this.unhighlightBack(e)}
+                        style={backButtonStyle} src={backButton} type="image"  name="backbutton"/>
                 </div>
             )
         }
         else if (this.state.goBack){
             //home, opponent, options, game, endGame
             if(this.state.returnScreen == 'game'){
-                return <GameFunctions difficulty={this.state.selectedDifficulty} n={this.state.size} players={this.state.players}/>
+                return <GameFunctions difficulty={this.state.selectedDifficulty} n={this.state.size} players={this.state.players} player1Score={this.state.player1Score} player2Score={this.state.player2Score}/>
             }
             else if(this.state.returnScreen == 'home'){
                 return <GameContainer />
@@ -147,11 +160,10 @@ class Help extends React.Component {
                 return <Opponent />
             }
             else if(this.state.returnScreen == 'options'){
-                console.log(this.state.players);
-                return <Options player={this.state.players}/>
+                return <Options players={this.state.players} player1Score={this.state.player1Score} player2Score={this.state.player2Score}/>
             }
             else if(this.state.returnScreen == 'endGame'){
-                return <EndGame />
+                return <EndGame player1Score={this.state.player1Score} player2Score={this.state.player2Score} player={this.state.players} winner={this.state.winner}/>
             }
         }
 

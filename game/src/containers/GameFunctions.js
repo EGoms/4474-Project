@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Speech from 'react-speech';
 import Help from './Help';
-import help from '../images/help.png';
+import helpButton from '../images/help.png';
+import helpHighlighted from '../images/help-highlighted.png';
 import hint from '../images/hint.png';
 import Options from '../containers/Options.js';
 import droplet from '../images/droplet.png';
@@ -153,6 +154,8 @@ class GameFunctions extends React.Component {
             players: props.players,         // Number of players
             n: Math.sqrt(props.n),          // sqrt(9) or sqrt(16) = 3 or 4
             difficulty: props.difficulty,   // Difficulty level
+            player1Score: props.player1Score,
+            player2Score: props.player2Score,
             player1Sum: 0,                  // Player 1's current sum
             player2Sum: 0,                  // Player 2's current sum
             player1Moves: 0,                // Number of moves made by Player 1
@@ -255,15 +258,28 @@ class GameFunctions extends React.Component {
             ...this.state,
             tasks
         });
-
         if (this.state.player1Sum == this.state.target) {   //If the player's sum matches target
-            this.state.endGame = true;
-            this.state.winner = "Player 1"
+            //this.state.player1Score += 1;
+            this.setState({
+                winner: "Player 1",
+                endGame: true
+            })
+            return;
         }
 
         if (this.state.player2Sum == this.state.target) {   //If the player's sum matches target
-        this.state.endGame = true;
-        this.state.winner = "CPU"
+            //this.state.player2Score += 1;
+            this.setState({
+                winner: "CPU",
+                endGame: true
+            })
+            return;
+        } 
+        if (this.state.player2Moves === this.state.n) {
+            this.setState({
+                winner: "Draw",
+                endGame: true
+            })
         }
     }
 
@@ -299,6 +315,7 @@ class GameFunctions extends React.Component {
             });
 
             if (this.state.player1Sum == this.state.target) {   //If the player's sum matches target
+                //this.state.player1Score += 1;
                 this.setState({
                     winner: "Player 1",
                     endGame: true
@@ -340,8 +357,14 @@ class GameFunctions extends React.Component {
             });
 
             if (this.state.player2Sum == this.state.target) {
+                //this.state.player2Score += 1;
                 this.setState({
                     winner: "Player 2",
+                    endGame: true
+                })
+            } else if (this.state.player2Moves === this.state.n) {
+                this.setState({
+                    winner: "Draw",
                     endGame: true
                 })
             }
@@ -397,10 +420,22 @@ class GameFunctions extends React.Component {
 
     showHelp(){
         console.log('Changing to helpscreen');
+        var resp = window.confirm("Going to help will end the current game, is this ok?")
+        if (!resp) {
+            return;
+        }
         this.setState({
             gamescreen: false,
             helpScreen: true,
             });
+    }
+
+    highlightHelp(e) {
+        e.target.src = helpHighlighted;
+    }
+
+    unhighlightHelp(e) {
+        e.target.src = helpButton;
     }
 
     showHintP1(e, sum) {
@@ -412,6 +447,10 @@ class GameFunctions extends React.Component {
     }
 
     showOptions(){
+        var resp = window.confirm("Changing settings will end the current game, is this ok?")
+        if (!resp) {
+            return;
+        }
         this.setState({
             showOptions: true,
             display: false
@@ -419,6 +458,10 @@ class GameFunctions extends React.Component {
     }
 
     newGame() {
+        var resp = window.confirm("Would you like to start a new game?")
+        if (!resp) {
+            return;
+        }
         this.setState({
             newGame: true
         })
@@ -487,7 +530,6 @@ class GameFunctions extends React.Component {
             gridColumnEnd: '3',
             gridRowStart: '2',
             gridRowEnd: '3',
-            //border: '0.5px solid black'
         }
         
         const board4 = {
@@ -500,8 +542,7 @@ class GameFunctions extends React.Component {
             gridColumnStart: '2',
             gridColumnEnd: '3',
             gridRowStart: '2',
-            gridRowEnd: '3',
-            border: '0.5px solid black'
+            gridRowEnd: '3'
         }
 
         const title = {
@@ -610,25 +651,40 @@ class GameFunctions extends React.Component {
             top: '2%',
             right: '1.3%'
         }
+        
+        const scoresStyle = {
+            display: 'block',
+            fontSize: '40px' ,
+            textAlign: 'center'
+        }
 
         if (this.state.showOptions) {
             if (this.props.inGame) {
                 return <GameFunctions />
             } else {
-                return <Options players={this.state.players}/>
+                return <Options players={this.state.players} player1Score={this.state.player1Score} player2Score={this.state.player2Score}/>
             };
         };
 
         if (this.state.helpScreen){
-            return <Help returnScreen={'game'} n={this.state.n} difficulty={this.state.difficulty} players={this.state.players}/>
+            return <Help returnScreen={'game'} n={this.state.n} difficulty={this.state.difficulty} players={this.state.players} player1Score={this.state.player1Score} player2Score={this.state.player2Score}/>
         }
 
         if (this.state.endGame) {
-            return <EndGame winner={this.state.winner}/>
+            if (this.state.winner == "Player 1") {
+                this.state.player1Score = this.state.player1Score + 1;
+            } else if (this.state.winner == "Draw") {
+                this.state.player1Score = this.state.player1Score;
+                this.state.player2Score = this.state.player2Score;
+            } else {
+                this.state.player2Score = this.state.player2Score + 1;
+            }
+            console.log(this.state.winner, this.state.player1Score, this.state.player2Score)
+            return <EndGame winner={this.state.winner} player1Score={this.state.player1Score} player2Score={this.state.player2Score} players={this.state.players}/>
         }
 
         if (this.state.newGame) {
-            return <GameFunctions difficulty={this.state.difficulty} n={this.state.n**2} players={this.state.players} />
+            return <GameFunctions difficulty={this.state.difficulty} n={this.state.n**2} players={this.state.players} player1Score={this.state.player1Score} player2Score={this.state.player2Score}/>
         }
         
         return (
@@ -676,11 +732,12 @@ class GameFunctions extends React.Component {
                         {tasks.p2}
                     </div></>}
                 </div>
+                <div style={scoresStyle}>{this.state.player1Score} &nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;&nbsp; {this.state.player2Score}</div>
                 {/* <input onClick={this.goBack} style={backButtonStyle} src={back} type="image"  name="backbutton"/> */}
                 {<input onClick={(e) => this.muteAudio(e)} onMouseEnter={(e) => this.highlightAudio(e)} onMouseLeave={(e) => this.unhighlightAudio(e)} 
                     style={audioButtonStyle} type="image" src={audioOnButton} name="audioButton"/>}
-                <input style={helpButtonStyle} onClick={this.showHelp}  type="image" src={help} name="helpbutton"/>
-                <input onClick={this.showOptions} onMouseEnter={(e) => this.highlightDifficulty(e)} onMouseLeave={(e) => this.unhighlightDifficulty(e)}
+                <input style={helpButtonStyle} onClick={this.showHelp}  type="image" src={helpButton} onMouseEnter={(e) => this.highlightHelp(e)} onMouseLeave={(e) => this.unhighlightHelp(e)} name="helpbutton"/>
+                <input onClick={() => this.showOptions()} onMouseEnter={(e) => this.highlightDifficulty(e)} onMouseLeave={(e) => this.unhighlightDifficulty(e)}
                     style={difficultyButtonStyle} type="image" src={difficultyButton} name="difficultyButton"/>
                 <input onClick={() => this.newGame()} style={newGameButtonStyle} type="image" src={newGameButton} name="newGameButton"/>
             </div>

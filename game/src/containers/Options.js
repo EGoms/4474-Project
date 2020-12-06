@@ -19,8 +19,10 @@ import DragAndDrop from '../containers/DragAndDrop';
 import Number9Render from '../components/Number9Render';
 import Number16Render from '../components/Number16Render';
 import ContinueButtonComponent from '../components/ContinueButtonComponent';
-import help from '../images/help.png';
-import back from '../images/back_arrow.png'
+import helpButton from '../images/help.png';
+import helpHighlighted from '../images/help-highlighted.png';
+import backButton from '../images/back_arrow.png'
+import backHighlighted from '../images/back-arrow-highlighted.png';
 
 
 class Options extends React.Component {
@@ -32,9 +34,10 @@ class Options extends React.Component {
             size: 9,
             startGame: false,
             helpscreen: false,
-            returnScreen: 'options'
+            returnScreen: 'options',
+            player1Score: props.player1Score,
+            player2Score: props.player2Score 
         };
-        console.log(props);
         this.easy = this.easy.bind(this);
         this.medium = this.medium.bind(this);
         this.hard = this.hard.bind(this);
@@ -108,11 +111,27 @@ class Options extends React.Component {
             });
     }
 
+    highlightHelp(e) {
+        e.target.src = helpHighlighted;
+    }
+
+    unhighlightHelp(e) {
+        e.target.src = helpButton;
+    }
+
     goBack(){
         this.setState({
             goBack: true,
             display: false
         })
+    }
+
+    highlightBack(e) {
+        e.target.src = backHighlighted;
+    }
+
+    unhighlightBack(e) {
+        e.target.src = backButton;
     }
 
     render(){
@@ -200,7 +219,7 @@ class Options extends React.Component {
         {
             if (this.props.inGame)
             {
-                return <GameFunctions />
+                return <GameFunctions difficulty={this.state.selectedDifficulty} n={this.state.size} players={this.state.players} player1Score={this.state.player1Score} player2Score={this.state.player2Score}/>
             }
             else
             {
@@ -209,7 +228,7 @@ class Options extends React.Component {
         };
 
         if (this.state.helpScreen){
-            return <Help returnScreen={'options'}/>
+            return <Help returnScreen={'options'} players={this.state.players} player1Score={this.state.player1Score} player2Score={this.state.player2Score}/>
         }
 
         // Render options screen
@@ -233,16 +252,16 @@ class Options extends React.Component {
                             <div onClick={this.playGame} style={continueCellStyle}><ContinueButtonComponent/></div>
                         </div>
                     </div>
-                    <input onClick={this.goBack} style={backButtonStyle} src={back} type="image"  name="backbutton"/>
-                    <input style={helpButtonStyle} onClick={this.showHelp}  type="image" src={help} name="helpbutton"/>
+                    <input onClick={this.goBack} onMouseEnter={(e) => this.highlightBack(e)} onMouseLeave={(e) => this.unhighlightBack(e)}
+                        style={backButtonStyle} src={backButton} type="image"  name="backbutton"/>
+                    <input style={helpButtonStyle} onClick={this.showHelp}  type="image" src={helpButton} onMouseEnter={(e) => this.highlightHelp(e)} onMouseLeave={(e) => this.unhighlightHelp(e)} name="helpbutton"/>
                 </div>
             )
         }
         else{
             return (
                 <div>
-                    {/* <GameFunctions difficulty size players={this.state.players} n={this.state.size} players={this.state.players} /> */}
-                    <GameFunctions difficulty={this.state.selectedDifficulty} n={this.state.size} players={this.state.players} />
+                    <GameFunctions difficulty={this.state.selectedDifficulty} n={this.state.size} players={this.state.players} player1Score={this.state.player1Score} player2Score={this.state.player2Score}/>
                 </div> 
             )
         };

@@ -1,5 +1,6 @@
 import React from 'react';
-import help from '../images/help.png';
+import helpButton from '../images/help.png';
+import helpHighlighted from '../images/help-highlighted.png';
 import Image from '../components/Image';
 import Title from '../components/Title';
 import Help from './Help';
@@ -33,6 +34,14 @@ class GameContainer extends React.Component {
             homeScreen: false,
             helpScreen: true,
             });
+    }
+
+    highlightHelp(e) {
+        e.target.src = helpHighlighted;
+    }
+
+    unhighlightHelp(e) {
+        e.target.src = helpButton;
     }
     
     showOpponent(){
@@ -125,7 +134,7 @@ class GameContainer extends React.Component {
                 <div style={myStyle}>
                     <div style={titleStyle}><Title /></div>
                     <div style ={playButtonDiv}><input style={playButtonStyle} onClick={this.showOpponent} type="image" src={Play} name="PlayButton"/></div>
-                    <div style={helpButtonDiv}><input style={helpButtonStyle} onClick={this.showHelp}  type="image" src={help} name="helpbutton"/></div>
+                    <div style={helpButtonDiv}><input style={helpButtonStyle} onClick={this.showHelp} onMouseEnter={(e) => this.highlightHelp(e)} onMouseLeave={(e) => this.unhighlightHelp(e)}  type="image" src={helpButton} name="helpbutton"/></div>
                 </div>
             )
         }; 

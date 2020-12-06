@@ -5,7 +5,8 @@ import GameFunctions from './GameFunctions';
 import playAgain from '../images/friend.png' //change this to play again img
 import options from '../images/computer.png' //Change this to options img
 import title from '../components/OpponentTitle'; //Change this to endGame Title
-import help from '../images/help.png';
+import helpButton from '../images/help.png';
+import helpHighlighted from '../images/help-highlighted.png';
 import back from '../images/back_arrow.png';
 import audioOnButton from '../images/audio_on.png';
 import audioOffButton from '../images/audio_off.png';
@@ -33,8 +34,10 @@ class EndGame extends React.Component {
           helpscreen: false,
           winner: props.winner,
           display: true,
-          player: 0,
-          muted: 0
+          player: props.players,
+          muted: 0,
+          player1Score: props.player1Score,
+          player2Score: props.player2Score
         };
         this.showHelp = this.showHelp.bind(this);
         this.muteAudio = this.muteAudio.bind(this);
@@ -46,26 +49,55 @@ class EndGame extends React.Component {
 
     showOptionsPVP() {
         console.log('Changing to Options PvP');
-        this.setState({
-            options: true,
-            player: 2
-        })
+        if (this.state.player === 1) {
+            var resp = window.confirm("You are currently playing vs a CPU. Switching to PvP will start a new score")
+            if (!resp) {
+                return;
+            }
+            this.setState({
+                player: 2,
+                player1Score: 0,
+                player2Score: 0,
+                options: true
+            })
+        } else {
+            this.setState({
+                player1Score: this.state.player1Score,
+                player2Score: this.state.player2Score,
+                options: true,
+                player: 2
+            })
+        }
     }
 
     showOptionsCPU() {
         console.log('Changing to Options PvP');
-        this.setState({
-            options: true,
-            player: 1
-        })
+        if (this.state.player === 2) {
+            var resp = window.confirm("You are currently playing vs a friend. Switching to CPU will start a new score")
+            if (!resp) {
+                return;
+            }
+            this.setState({
+                player1Score: 0,
+                player2Score: 0,
+                options: true,
+                player: 1
+            })
+        } else {
+            this.setState({
+                player1Score: this.state.player1Score,
+                player2Score: this.state.player2Score,
+                options: true,
+                player: 1
+            })
+        }
     }
 
     showOptions(){
         console.log('Changing to Options CPU');
         this.setState({
             options: true,
-            opponent: false,
-            player: 1
+            opponent: false
         });
     }
       
@@ -75,6 +107,14 @@ class EndGame extends React.Component {
             EndGame: false,
             helpScreen: true,
             });
+    }
+
+    highlightHelp(e) {
+        e.target.src = helpHighlighted;
+    }
+
+    unhighlightHelp(e) {
+        e.target.src = helpButton;
     }
 
     muteAudio(e) {
@@ -131,21 +171,6 @@ class EndGame extends React.Component {
             borderRadius: '10px'
         };
 
-        const cpuButtonStyle = {
-            width: '30%',
-            height: '80%',
-            marginLeft: 'auto',
-            marginRight: 'auto'
-        };
-
-        const playerButtonStyle = {
-            width: '30%',
-            height: '80%',
-            marginLeft: 'auto',
-            marginRight: 'auto'
-
-        };
-
         const title = {
             fontSize: '40px' ,
             textAlign: 'center',
@@ -174,14 +199,39 @@ class EndGame extends React.Component {
             bottom: '2%',
             left: '1%'
         } 
-        const playAgainButtonStyle = {
+
+        const cpuButtonStyle = {
+            width: '30%',
+            height: '80%',
+            marginLeft: 'auto',
+            marginRight: 'auto'
+        };
+
+        const playerButtonStyle = {
+            width: '30%',
+            height: '80%',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        };
+        
+        const playAgainPlayerButtonStyle = {
             display: 'block',
             //float: 'left',
             position: 'absolute',
-            width: '4%',
+            width: '20%',
             height: 'auto',
-            bottom: '2%',
-            right: '1%'
+            top: '35%',
+            left: '40%'
+        }
+
+        const playAgainCPUButtonStyle = {
+            display: 'block',
+            //float: 'left',
+            position: 'absolute',
+            width: '20%',
+            height: 'auto',
+            top: '65%',
+            left: '40%'
         } 
 
         const helpButtonStyle = {
@@ -209,9 +259,9 @@ class EndGame extends React.Component {
             //float: 'left',
             position: 'absolute',
             width: '5%',
-            height: '9%', 
-            top: '2%',
-            left: '1.3%'
+            height: 'auto', 
+            bottom: '2.6%',
+            right: '1.3%'
         }
 
         const audioButtonStyle = {
@@ -225,11 +275,11 @@ class EndGame extends React.Component {
         }
 
         if (this.state.helpScreen){
-            return <Help returnScreen={'endGame'}/>
+            return <Help returnScreen={'endGame'} players={this.state.player} player1Score={this.state.player1Score} player2Score={this.state.player2Score} winner={this.state.winner}/>
         }
         if (this.state.options)
         {
-            return <Options players={this.state.player}/>
+            return <Options players={this.state.player} player1Score={this.state.player1Score} player2Score={this.state.player2Score}/>
         }
         else if (this.state.game){
             return <GameFunctions difficulty={this.props.selectedDifficulty} n={this.props.size} players={this.props.players}/>
@@ -240,16 +290,19 @@ class EndGame extends React.Component {
                 <div>
                     <div style={myStyle}>
                         <div style={title}>
-                            Winner is {this.state.winner}!
+                            {this.state.winner == "Draw" ? (<b>Game is a Draw</b>) : (<b>Winner is {this.state.winner}!</b>)}<br/><br/>
+                            <small><b>Current Score <br/></b></small>
+                            {this.state.player == 1 ? (<small>Player 1 - CPU</small>) : (<small>Player 1 - Player 2</small>)} <br/>
+                            <small>{this.state.player1Score} - {this.state.player2Score}</small>
                         </div>
 
                         {/* Need to add images here for playAgain button and options button */}
-                        <input onClick={this.showOptionsPVP} style={playAgainButtonStyle} type="image" src={playAgain}  name="playerpbutton"/>
-                        <input onClick={this.showOptionsCPU} style={optionsButtonStyle} type="image" src={options} name="cpupbutton"/>
+                        <input onClick={this.showOptionsPVP} style={playerButtonStyle} type="image" src={playAgain}  name="playerpbutton"/>
+                        <input onClick={this.showOptionsCPU} style={cpuButtonStyle} type="image" src={options} name="cpupbutton"/>
                     </div>
-                    <input onClick={(e) => this.muteAudio(e)} onMouseEnter={(e) => this.highlightAudio(e)} onMouseLeave={(e) => this.unhighlightAudio(e)}
-                        style={audioButtonStyle} type="image" src={audioOnButton} name="audioButton"/>
-                    <input style={helpButtonStyle} onClick={this.showHelp}  type="image" src={help} name="helpbutton"/>
+                    {/* <input onClick={(e) => this.muteAudio(e)} onMouseEnter={(e) => this.highlightAudio(e)} onMouseLeave={(e) => this.unhighlightAudio(e)} */}
+                        {/* style={audioButtonStyle} type="image" src={audioOnButton} name="audioButton"/> */}
+                    <input style={helpButtonStyle} onClick={this.showHelp} onMouseEnter={(e) => this.highlightHelp(e)} onMouseLeave={(e) => this.unhighlightHelp(e)}  type="image" src={helpButton} name="helpbutton"/>
                     <input onClick={this.showOptions} onMouseEnter={(e) => this.highlightDifficulty(e)} onMouseLeave={(e) => this.unhighlightDifficulty(e)}
                         style={difficultyButtonStyle} type="image" src={difficultyButton} name="difficultyButton"/>
                     {/* <input onClick={() => this.newGame()} style={newGameButtonStyle} type="image" src={newGameButton} name="newGameButton"/> */}

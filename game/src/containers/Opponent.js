@@ -4,10 +4,12 @@ import Help from './Help';
 import GameContainer from './GameContainer'
 import GameFunctions from './GameFunctions';
 import friend from '../images/friend.png'
-import help from '../images/help.png';
+import helpButton from '../images/help.png';
+import helpHighlighted from '../images/help-highlighted.png';
 import computer from '../images/computer.png'
 import DragAndDrop from './DragAndDrop';
-import back from '../images/back_arrow.png';
+import backButton from '../images/back_arrow.png';
+import backHighlighted from '../images/back-arrow-highlighted.png';
 import OpponentTitle from '../components/OpponentTitle';
 
 class Opponent extends React.Component {
@@ -18,7 +20,7 @@ class Opponent extends React.Component {
           opponent: true,
           options: false,
           game: false,
-          player: 1,
+          players: 1,
           helpScreen: false,
           returnScreen: 'opponent'
         };
@@ -33,7 +35,7 @@ class Opponent extends React.Component {
         this.setState({
             options: true,
             opponent: false,
-            player: 1
+            players: 1
         });
     }
 
@@ -42,7 +44,7 @@ class Opponent extends React.Component {
         this.setState({
             options: true,
             opponent: false,
-            player: 2
+            players: 2
         });
     }
 
@@ -54,11 +56,27 @@ class Opponent extends React.Component {
             });
     }
 
+    highlightHelp(e) {
+        e.target.src = helpHighlighted;
+    }
+
+    unhighlightHelp(e) {
+        e.target.src = helpButton;
+    }
+
     goBack(){
         this.setState({
             goBack: true,
             display: false
         })
+    }
+
+    highlightBack(e) {
+        e.target.src = backHighlighted;
+    }
+
+    unhighlightBack(e) {
+        e.target.src = backButton;
     }
 
     render() {
@@ -146,14 +164,15 @@ class Opponent extends React.Component {
                         <input onClick={this.showOptionsPVP} style={playerButtonStyle} type="image" src={friend} name="playerpbutton"/>
                         <input onClick={this.showOptionsCPU} style={cpuButtonStyle} type="image" src={computer} name="cpupbutton"/>
                     </div>
-                    <input onClick={this.goBack} style={backButtonStyle} src={back} type="image"  name="backbutton"/>
-                    <input style={helpButtonStyle} onClick={this.showHelp}  type="image" src={help} name="helpbutton"/>
+                    <input onClick={this.goBack} onMouseEnter={(e) => this.highlightBack(e)} onMouseLeave={(e) => this.unhighlightBack(e)}
+                        style={backButtonStyle} src={backButton} type="image"  name="backbutton"/>
+                    <input style={helpButtonStyle} onClick={this.showHelp}  type="image" src={helpButton} onMouseEnter={(e) => this.highlightHelp(e)} onMouseLeave={(e) => this.unhighlightHelp(e)} name="helpbutton"/>
                 </div>
             );
         }
         else if (this.state.options)
         {
-            return <Options players={this.state.player}/>
+            return <Options players={this.state.players} player1Score={0} player2Score={0}/>
         }
         else if (this.state.game){
             return <GameFunctions />
