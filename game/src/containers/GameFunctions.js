@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Speech from 'react-speech';
+//import Speech from 'react-speech';
 import Help from './Help';
 import helpButton from '../images/help.png';
 import helpHighlighted from '../images/help-highlighted.png';
