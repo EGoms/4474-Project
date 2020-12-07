@@ -3,6 +3,7 @@ import HelpVid from './HelpVid';
 import helpTitle from '../images/helpTitle.png'
 import backButton from '../images/back_arrow.png'
 import backHighlighted from '../images/back-arrow-highlighted.png';
+import helpVideo from '../videos/HelpVid.mp4'
 import GameContainer from './GameContainer'
 import GameFunctions from './GameFunctions'
 import Opponent from './Opponent'
@@ -68,9 +69,9 @@ class Help extends React.Component {
         const vidStyle = {
             gridColumnStart: '2',
             gridColumnEnd: '3',
-            height: '80%',
-            width: '100%',
-            marginTop: '-7%'
+            height: '67%',
+            width: '95%'
+            //marginTop: '0%'
         }
 
         const backImageStyle = {
@@ -138,10 +139,10 @@ class Help extends React.Component {
                                     in a stalemate and a draw is declared.</p></div>
                         </div> 
                         <div style={rightColumn}>
-                            <div style={vidStyle}>
-                                    <HelpVid />
-                                </div>
-                            </div>            
+                            <video style={vidStyle} controls>
+                                <source src={helpVideo} type="video/mp4" name="helpVid"/>
+                            </video> 
+                        </div>            
                     </div> 
                     <input onClick={this.goBack} onMouseEnter={(e) => this.highlightBack(e)} onMouseLeave={(e) => this.unhighlightBack(e)}
                         style={backButtonStyle} src={backButton} type="image"  name="backbutton"/>
